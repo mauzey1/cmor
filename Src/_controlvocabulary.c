@@ -20,6 +20,8 @@ static PyObject *PyCV_checkFilename(PyObject * self, PyObject * args)
     int nTimeCalLen;
     int nTimeUnitsLen;
     int ninfile;
+    int ierr;
+
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "iis#s#s#", &ntable, &varid,
@@ -28,10 +30,10 @@ static PyObject *PyCV_checkFilename(PyObject * self, PyObject * args)
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkFilename(cmor_tables[ntable].CV, varid,
+    ierr = cmor_CV_checkFilename(cmor_tables[ntable].CV, varid,
                           szInTimeCalendar, szInTimeUnits, infile);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -40,15 +42,16 @@ static PyObject *PyCV_checkFilename(PyObject * self, PyObject * args)
 static PyObject *PyCV_checkSubExpID(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkSubExpID(cmor_tables[nVarRefTblID].CV);
+    ierr = cmor_CV_checkSubExpID(cmor_tables[nVarRefTblID].CV);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -57,15 +60,16 @@ static PyObject *PyCV_checkSubExpID(PyObject * self, PyObject * args)
 static PyObject *PyCV_checkParentExpID(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkParentExpID(cmor_tables[nVarRefTblID].CV);
+    ierr = cmor_CV_checkParentExpID(cmor_tables[nVarRefTblID].CV);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -74,15 +78,16 @@ static PyObject *PyCV_checkParentExpID(PyObject * self, PyObject * args)
 static PyObject *PyCV_setInstitution(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_setInstitution(cmor_tables[nVarRefTblID].CV);
+    ierr = cmor_CV_setInstitution(cmor_tables[nVarRefTblID].CV);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -91,13 +96,14 @@ static PyObject *PyCV_setInstitution(PyObject * self, PyObject * args)
 static PyObject *PyCV_checkSourceID(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
-    cmor_CV_checkSourceID(cmor_tables[nVarRefTblID].CV);
-    return (Py_BuildValue("i", 0));
+    ierr = cmor_CV_checkSourceID(cmor_tables[nVarRefTblID].CV);
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -106,15 +112,16 @@ static PyObject *PyCV_checkSourceID(PyObject * self, PyObject * args)
 static PyObject *PyCV_checkExperiment(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkExperiment(cmor_tables[nVarRefTblID].CV);
+    ierr = cmor_CV_checkExperiment(cmor_tables[nVarRefTblID].CV);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -123,15 +130,16 @@ static PyObject *PyCV_checkExperiment(PyObject * self, PyObject * args)
 static PyObject *PyCV_checkGrids(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkGrids(cmor_tables[nVarRefTblID].CV);
+    ierr = cmor_CV_checkGrids(cmor_tables[nVarRefTblID].CV);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -140,15 +148,17 @@ static PyObject *PyCV_checkGrids(PyObject * self, PyObject * args)
 static PyObject *PyCV_checkFurtherInfoURL(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
+
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkFurtherInfoURL(nVarRefTblID);
+    ierr = cmor_CV_checkFurtherInfoURL(nVarRefTblID);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -157,15 +167,16 @@ static PyObject *PyCV_checkFurtherInfoURL(PyObject * self, PyObject * args)
 static PyObject *PyCV_GblAttributes(PyObject * self, PyObject * args)
 {
     int nVarRefTblID;
+    int ierr;
     cmor_is_setup();
 
     if (!PyArg_ParseTuple(args, "i", &nVarRefTblID)) {
         return (Py_BuildValue("i", -1));
     }
 
-    cmor_CV_checkGblAttributes(cmor_tables[nVarRefTblID].CV);
+    ierr = cmor_CV_checkGblAttributes(cmor_tables[nVarRefTblID].CV);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -173,11 +184,12 @@ static PyObject *PyCV_GblAttributes(PyObject * self, PyObject * args)
 /************************************************************************/
 static PyObject *PyCV_checkISOTime(PyObject * self, PyObject * args)
 {
+    int ierr;
     cmor_is_setup();
 
-    cmor_CV_checkISOTime(GLOBAL_ATT_CREATION_DATE);
+    ierr = cmor_CV_checkISOTime(GLOBAL_ATT_CREATION_DATE);
 
-    return (Py_BuildValue("i", 0));
+    return (Py_BuildValue("i", ierr));
 }
 
 /************************************************************************/
@@ -255,6 +267,15 @@ static PyObject *PyCMOR_set_variable_attribute(PyObject * self, PyObject * args)
     if (ierr != 0)
         return NULL;
     Py_INCREF(Py_None);
+    return (Py_None);
+}
+/************************************************************************/
+/*                         PyCV_reset_Error()                           */
+/************************************************************************/
+static PyObject *PyCV_reset_Error(PyObject * self, PyObject * args)
+{
+    cmor_is_setup();
+    CV_ERROR = 0;
     return (Py_None);
 }
 
@@ -556,6 +577,7 @@ static PyObject *PyCV_setup_variable(PyObject * self, PyObject * args)
     char *name;
     char *units;
     float missing;
+    int imissing;
     double startime;
     double endtime;
     double startimebnds;
@@ -628,6 +650,7 @@ static PyMethodDef MyExtractMethods[] = {
     {"getCMOR_defaults_include", PyCMOR_getincvalues, METH_VARARGS},
     {"setup_variable", PyCV_setup_variable, METH_VARARGS},
     {"get_CV_Error", PyCV_get_Error, METH_VARARGS},
+    {"reset_CV_Error", PyCV_reset_Error},
     {"set_CV_Error", PyCV_set_Error, METH_VARARGS},
 
     {NULL, NULL}                /*sentinel */

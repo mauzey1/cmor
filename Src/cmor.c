@@ -596,6 +596,7 @@ void cmor_handle_error(char error_msg[CMOR_MAX_STRING], int level)
 
         snprintf(msg, CMOR_MAX_STRING, "! Error: %s", error_msg);
     }
+    // fprintf(stderr, "%s ERROR LEVEL %d\n", error_msg, level);
     if (CMOR_VERBOSITY != CMOR_QUIET || level != CMOR_WARNING) {
         for (i = 0; i < 25; i++) {
             fprintf(output_logfile, "!");
@@ -1465,6 +1466,22 @@ int cmor_set_cur_dataset_attribute_internal(char *name, char *value,
         return (1);
     }
 
+
+//    // clear attribute
+    if ((strcmp(value,"") == 0) && (optional == 0)){
+        for (i = 0; i <= cmor_current_dataset.nattributes; i++) {
+            if (strcmp(name, cmor_current_dataset.attributes[i].names) == 0) {
+                n = i;
+                break;
+            }
+        }
+        if (i != cmor_current_dataset.nattributes - 1) {
+            strcpy(cmor_current_dataset.attributes[i].values, "");
+            cmor_pop_traceback();
+            return (0);
+        }
+    }
+
     if ((value == NULL) || (msg[0] == '\0')) {
         if (optional == 1) {
             cmor_pop_traceback();
@@ -1478,6 +1495,7 @@ int cmor_set_cur_dataset_attribute_internal(char *name, char *value,
             return (1);
         }
     }
+
 
     cmor_trim_string(name, msg);
     n = cmor_current_dataset.nattributes;
@@ -2744,7 +2762,7 @@ int cmor_setGblAttr(int var_id)
 /* -------------------------------------------------------------------- */
 /*    Set attribute data_specs_versions for netCDF file (CMIP6)         */
 /* -------------------------------------------------------------------- */
-    if (cmor_tables[nVarRefTblID].data_specs_version != '\0') {
+    if (cmor_tables[nVarRefTblID].data_specs_version[0] != '\0') {
         snprintf(msg, CMOR_MAX_STRING, "%s",
                  cmor_tables[nVarRefTblID].data_specs_version);
         cmor_set_cur_dataset_attribute_internal(GLOBAL_ATT_DATASPECSVERSION,
@@ -2830,6 +2848,13 @@ int cmor_setGblAttr(int var_id)
                                                 0);
     }
     cmor_generate_uuid();
+    ctmp[0]='\0';
+/* -------------------------------------------------------------------- */
+/*     Initialize externa_variables attribute                           */
+/* -------------------------------------------------------------------- */
+    cmor_set_cur_dataset_attribute_internal(GLOBAL_ATT_EXTERNAL_VAR,
+                                            "", 0);
+
 /* -------------------------------------------------------------------- */
 /*     Create external_variables                                        */
 /* -------------------------------------------------------------------- */
@@ -3199,7 +3224,8 @@ void cmor_write_all_attributes(int ncid, int ncafid, int var_id)
 /* -------------------------------------------------------------------- */
 /*      Skip attributes starting with "_"                               */
 /* -------------------------------------------------------------------- */
-            if (cmor_current_dataset.attributes[i].names[0] != '_') {
+            if ((cmor_current_dataset.attributes[i].names[0] != '_')
+                    && (cmor_current_dataset.attributes[i].values[0] != '\0')) {
                 ierr = nc_put_att_text(ncid, NC_GLOBAL,
                                        cmor_current_dataset.attributes[i].names,
                                        itmp2,
@@ -3465,7 +3491,7 @@ void cmor_define_dimensions(int var_id, int ncid,
                    cname);
 
             if (ctmp[0] == '\0') {
-                strcpy(ctmp, "geo_region");
+                strcpy(ctmp, "sector");
             }
 
             if (cmor_has_variable_attribute(var_id, "coordinates") == 0) {
@@ -6039,7 +6065,7 @@ int cmor_close_variable(int var_id, char *file_name, int *preserve)
             fperr = fopen(outname, "r");
             if (fperr != NULL) {
                 sprintf(msg, "%s.copy", outname);
-                if (rename(cmor_vars[var_id].current_path, msg) == 0) {
+                if (rename(outname, msg) == 0) {
                     snprintf(msg, CMOR_MAX_STRING,
                              "Output file ( %s ) already exists,\n! "
                              "remove file or use CMOR_REPLACE or\n! "
@@ -6053,10 +6079,10 @@ int cmor_close_variable(int var_id, char *file_name, int *preserve)
                              "remove file or use CMOR_REPLACE or\n! "
                              "CMOR_APPEND for CMOR_NETCDF_MODE value in\n! "
                              "cmor_setup.", outname);
+                    cmor_handle_error_var(msg, CMOR_CRITICAL, var_id);
                 }
                 ierr = fclose(fperr);
                 fperr = NULL;
-                cmor_handle_error_var(msg, CMOR_CRITICAL, var_id);
             }
         }
         ierr = rename(cmor_vars[var_id].current_path, outname);
