@@ -14,7 +14,8 @@ git push
 cp -v ~/cmor/scripts/CMIP6_CV.json  .
 msg="cron: update CMIP6_CV -- "`date +%Y-%m-%dT%H:%M`
 echo $msg
-git commit -am $msg
+cmd="git commit -am '${msg}'"
+eval $cmd
 git push
 URL=`hub pull-request CMIP6_CVupdt -m $msg`
 if [[ ! -z $URL ]]; then
