@@ -72,8 +72,8 @@ void loopRoutine(char *times, char *returnvalue)
     int axes_ids[CMOR_MAX_DIMENSIONS];
     int i, j, k, ierr;
 
-    double Time[ntimes];
-    double bnds_time[ntimes * 2];
+    double Time[2 * ntimes];
+    double bnds_time[2 * ntimes * 2];
     double tolerance = 1.e-4;
     double lon0 = 280.;
     double lat0 = 0.;
@@ -93,11 +93,16 @@ void loopRoutine(char *times, char *returnvalue)
     ierr = cmor_load_table("Tables/CMIP6_Amon.json", &tables[1]);
     printf("Test code: ok load cmor table(s)\n");
 
-    k = ( times ) ? 1 : 0 ;
-    for (i = k*ntimes; i < k*ntimes+ntimes; i++)
-        read_time(i, &Time[i-k*ntimes], &bnds_time[2 * (i-k*ntimes)]);
+    // k = ( times ) ? 1 : 0 ;
+    // for (i = k*ntimes; i < k*ntimes+ntimes; i++)
+    //     read_time(i, &Time[i-k*ntimes], &bnds_time[2 * (i-k*ntimes)]);
+    // ierr =
+    //   cmor_axis(&axes_ids[0], "time", "months since 1980", 2, &Time[0], 'd',
+    //             &bnds_time[0], 2, NULL);
+    for (i = 0; i < 2*ntimes; i++)
+        read_time(i, &Time[i], &bnds_time[2 * i]);
     ierr =
-      cmor_axis(&axes_ids[0], "time", "months since 1980", 2, &Time[0], 'd',
+      cmor_axis(&axes_ids[0], "time", "months since 1980", 4, &Time[0], 'd',
                 &bnds_time[0], 2, NULL);
 
 
