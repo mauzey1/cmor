@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+//read_time
 void read_time(it, time, time_bnds)
 int it;
 double time[];
