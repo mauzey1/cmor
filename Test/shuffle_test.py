@@ -62,6 +62,7 @@ nTimes = [1, 2, 5, 10]
 dLat = 360
 dLon = 720
 iters = 20
+saveFiles = True
 
 with open('shuffle_test.csv', 'w') as csvfile:
     fieldnames = ['shuffle', 'deflate', 'deflate_level', 'nLat', 'nLon', 'nTimes', 'fileSize', 'time', 'iteration']
@@ -83,5 +84,13 @@ with open('shuffle_test.csv', 'w') as csvfile:
                 row.update(ds)
                 writer.writerow(row)
                 print('{iteration}: shuffle = {shuffle}, deflate = {deflate}, deflate_level = {deflate_level}, nLat = {nLat}, nLon = {nLon}, nTimes = {nTimes}, size = {fileSize} bytes, time = {time}'.format(**row))
-                newFilename = '.'.join([filename,'s%s_d%s_dl%s_%s_%s_%s_%s'%(ds['shuffle'], ds['deflate'], ds['deflate_level'], nLat,nLon,nt,it)])
-                os.rename(filename,newFilename)
+                if saveFiles:
+                    basename = os.path.basename(filename)
+                    path = os.path.join(os.getcwd(), 'shuffle_test', 's%s_d%s_l%s'%(ds['shuffle'], ds['deflate'], ds['deflate_level']))
+                    path = os.path.join(path, '%dx%dx%d'%(nLat,nLon,nt))
+                    if not os.path.isdir(path):
+                        os.makedirs(path)
+                    newFilename = os.path.join(path, '.'.join([basename,'%d'%(it)]))
+                    os.rename(filename,newFilename)
+                else:
+                    os.remove(filename)
