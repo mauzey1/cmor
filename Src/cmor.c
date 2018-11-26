@@ -5558,6 +5558,121 @@ int cmor_CreateFromTemplate(int nVarRefTblID, char *templateSTH,
 }
 
 /************************************************************************/
+/*                    cmor_CreateFromTemplateWithVersion()              */
+/************************************************************************/
+int cmor_CreateFromTemplateWithVersion(int nVarRefTblID, char *templateSTH,
+                            char *szJoin, char *separator, char *version)
+{
+    char *szToken;
+    char *szFirstItem;
+    char tmp[CMOR_MAX_STRING];
+    char path_template[CMOR_MAX_STRING];
+    cmor_table_t *pTable;
+    int rc;
+
+    pTable = &cmor_tables[nVarRefTblID];
+
+    cmor_add_traceback("cmor_CreateFromTemplate");
+    cmor_is_setup();
+
+    strcpy(path_template, templateSTH);
+/* -------------------------------------------------------------------- */
+/*    Get rid of <> characters from template and add "information"      */
+/*    to path                                                           */
+/* -------------------------------------------------------------------- */
+    szToken = strtok(path_template, GLOBAL_SEPARATORS);
+    int optional = 0;
+    while (szToken) {
+
+/* -------------------------------------------------------------------- */
+/*      Is this an optional token.                                      */
+/* -------------------------------------------------------------------- */
+        if (strncmp(szToken, GLOBAL_OPENOPTIONAL, 1) == 0) {
+            optional = 1;
+
+        } else if (strncmp(szToken, GLOBAL_CLOSEOPTIONAL, 1) == 0) {
+            optional = 0;
+/* -------------------------------------------------------------------- */
+/*      This token must be a global attribute, a table header attribute */
+/*      or an internal attribute.  Otherwise we just skip it and the    */
+/*      user get a warning.                                             */
+/* -------------------------------------------------------------------- */
+        } else if (strcmp(szToken, GLOBAL_ATT_CONVENTIONS) == 0) {
+            cmor_get_cur_dataset_attribute(szToken, tmp);
+            strncat(szJoin, tmp, CMOR_MAX_STRING);
+            strcat(szJoin, separator);
+
+        } else if (cmor_has_cur_dataset_attribute(szToken) == 0) {
+            cmor_get_cur_dataset_attribute(szToken, tmp);
+            szFirstItem = strstr(tmp, " ");
+            if (szFirstItem != NULL) {
+/* -------------------------------------------------------------------- */
+/*  Copy only the first characters before " " for multiple words token  */
+/* -------------------------------------------------------------------- */
+                strncat(szJoin, tmp, szFirstItem - tmp);
+            } else {
+                strncat(szJoin, tmp, CMOR_MAX_STRING);
+            }
+            strcat(szJoin, separator);
+
+        } else if (cmor_get_table_attr(szToken, pTable, tmp) == 0) {
+            strncat(szJoin, tmp, CMOR_MAX_STRING);
+            strcat(szJoin, separator);
+
+        } else if (strcmp(szToken, OUTPUT_TEMPLATE_RIPF) == 0) {
+            rc = cmor_addRIPF(szJoin);
+            if (!rc) {
+                return (rc);
+            }
+            strcat(szJoin, separator);
+        } else if (strcmp(szToken, GLOBAL_ATT_VARIABLE_ID) == 0) {
+            strncat(szJoin, szToken, CMOR_MAX_STRING);
+            strcat(szJoin, separator);
+            // check if attribute start with '_"
+        } else {
+            char szInternalAtt[CMOR_MAX_STRING];
+            strcpy(szInternalAtt, GLOBAL_INTERNAL);
+            strncat(szInternalAtt, szToken, strlen(szToken));
+            if (cmor_has_cur_dataset_attribute(szInternalAtt) == 0) {
+                if (strcmp(szToken, GLOBAL_ATT_VERSION) == 0) {
+                    strncat(szJoin, version, CMOR_MAX_STRING);
+                    strcat(szJoin, separator);
+                } else {
+                    cmor_get_cur_dataset_attribute(szInternalAtt, tmp);
+                    if (!optional) {
+                        strncat(szJoin, tmp, CMOR_MAX_STRING);
+                        strcat(szJoin, separator);
+                    } else {
+/* -------------------------------------------------------------------- */
+/*      Skip "no-driver for filename if optional is set to 1            */
+/* -------------------------------------------------------------------- */
+                        if (strcmp(tmp, GLOBAL_ATT_VAL_NODRIVER) != 0) {
+                            strncat(szJoin, tmp, CMOR_MAX_STRING);
+                            strcat(szJoin, separator);
+                        }
+                    }
+                }
+/* -------------------------------------------------------------------- */
+/*      Just Copy the token without a separator                         */
+/* -------------------------------------------------------------------- */
+            } else {
+                strncat(szJoin, szToken, CMOR_MAX_STRING);
+            }
+        }
+
+        szToken = strtok(NULL, "><");
+    }
+/* -------------------------------------------------------------------- */
+/*     If the last character is the separator delete it.                */
+/* -------------------------------------------------------------------- */
+    if (strcmp(&szJoin[strlen(szJoin) - 1], separator) == 0) {
+        szJoin[strlen(szJoin) - 1] = '\0';
+    }
+    cmor_pop_traceback();
+    return (0);
+}
+
+/************************************************************************/
 /*                          cmor_addVersion()                           */
 /************************************************************************/
 int cmor_addVersion()
