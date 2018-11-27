@@ -15,6 +15,7 @@
 #include <math.h>
 #include <limits.h>
 #include <regex.h>
+#include <glob.h>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -4443,6 +4444,7 @@ int cmor_write(int var_id, void *data, char type, char *file_suffix,
             ierr +=
               cmor_CreateFromTemplate(nVarRefTblID, szPathTemplate, msg, "/");
         }
+        ierr += cmor_checkForOlderVersions(nVarRefTblID, szPathTemplate, cmor_current_dataset.outpath);
 
         if (ierr != 0) {
             sprintf(ctmp,
@@ -5572,7 +5574,7 @@ int cmor_CreateFromTemplateWithVersion(int nVarRefTblID, char *templateSTH,
 
     pTable = &cmor_tables[nVarRefTblID];
 
-    cmor_add_traceback("cmor_CreateFromTemplate");
+    cmor_add_traceback("cmor_CreateFromTemplateWithVersion");
     cmor_is_setup();
 
     strcpy(path_template, templateSTH);
@@ -5634,7 +5636,7 @@ int cmor_CreateFromTemplateWithVersion(int nVarRefTblID, char *templateSTH,
             strcpy(szInternalAtt, GLOBAL_INTERNAL);
             strncat(szInternalAtt, szToken, strlen(szToken));
             if (cmor_has_cur_dataset_attribute(szInternalAtt) == 0) {
-                if (strcmp(szToken, GLOBAL_ATT_VERSION) == 0) {
+                if (strcmp(szInternalAtt, GLOBAL_ATT_VERSION) == 0) {
                     strncat(szJoin, version, CMOR_MAX_STRING);
                     strcat(szJoin, separator);
                 } else {
@@ -5692,6 +5694,98 @@ int cmor_addVersion()
     strcat(szVersion, szDate);
 
     cmor_set_cur_dataset_attribute_internal(GLOBAL_ATT_VERSION, szVersion, 1);
+    cmor_pop_traceback();
+    return (0);
+}
+
+/************************************************************************/
+/*                          cmor_checkForOlderVersions()                */
+/************************************************************************/
+int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir)
+{
+    char dir_wildcard[CMOR_MAX_STRING];
+    char dir_strptime[CMOR_MAX_STRING];
+    char cur_version[CMOR_MAX_STRING];
+	int glob_flags = 0;
+	glob_t glob_results;
+    int i;
+    struct tm dir_tm, cur_tm;
+    time_t dir_time, cur_time;
+    int days_diff;
+	char *time_res;
+    int ierr;
+    char msg[CMOR_MAX_STRING];
+
+    cmor_add_traceback("cmor_checkForOlderVersions");
+    cmor_is_setup();
+
+    strcpy(dir_wildcard, "");
+    strcpy(dir_strptime, "");
+    strcpy(cur_version, "");
+    strcpy(msg, "");
+
+    strncpytrim(dir_wildcard, outdir, CMOR_MAX_STRING);
+    if ((strlen(dir_wildcard) > 0) && (dir_wildcard[strlen(dir_wildcard)] != '/')) {
+        strncat(dir_wildcard, "/", CMOR_MAX_STRING);
+    }
+
+    strncpytrim(dir_strptime, outdir, CMOR_MAX_STRING);
+    if ((strlen(dir_strptime) > 0) && (dir_strptime[strlen(dir_strptime)] != '/')) {
+        strncat(dir_strptime, "/", CMOR_MAX_STRING);
+    }
+
+    cmor_CreateFromTemplateWithVersion(nVarRefTblID, templateSTH, dir_wildcard, "/", "*");
+    cmor_CreateFromTemplateWithVersion(nVarRefTblID, templateSTH, dir_strptime, "/", "v%Y%m%d");
+
+	ierr = glob(dir_wildcard, glob_flags, NULL, &glob_results);
+    if (ierr != GLOB_NOMATCH) {
+        if (ierr != 0) {
+            switch (ierr) {
+                case GLOB_NOSPACE:
+                    snprintf(msg, CMOR_MAX_STRING, "Glob Error %i: %s\n! ",
+                            ierr, "GLOB_NOSPACE");
+                case GLOB_ABORTED:
+                    snprintf(msg, CMOR_MAX_STRING, "Glob Error %i: %s\n! ",
+                            ierr, "GLOB_ABORTED");
+                default:
+                    snprintf(msg, CMOR_MAX_STRING, "Glob Error %i: %s\n! ",
+                            ierr, "unknown error");
+            }
+            cmor_handle_error(msg, CMOR_CRITICAL);
+            cmor_pop_traceback();
+            return (1);
+        }
+                    
+        cmor_get_cur_dataset_attribute(GLOBAL_ATT_VERSION, cur_version);
+        time_res = strptime(cur_version, "v%Y%m%d", &cur_tm);
+        cur_tm.tm_hour = 0;
+        cur_tm.tm_min = 0;
+        cur_tm.tm_sec = 0;
+        cur_time = mktime(&cur_tm);
+
+        for (i = 0; i < glob_results.gl_pathc; i++) {
+            time_res = strptime(glob_results.gl_pathv[i], dir_strptime, &dir_tm);
+            if(time_res != NULL) {
+                dir_tm.tm_hour = 0;
+                dir_tm.tm_min = 0;
+                dir_tm.tm_sec = 0;
+                dir_time = mktime(&dir_tm);
+                days_diff = (int)(difftime(cur_time, dir_time)/(24*60*60));
+                if (cur_time != dir_time && 0 < days_diff && days_diff <= 2) {
+                    printf("%u\n", cur_time);
+                    printf("%u\n", dir_time);
+                    printf("%u\n", days_diff);
+                    printf("%s is within 2 days of %s.\n",
+                            glob_results.gl_pathv[i], cur_version);
+                }
+            }
+        }
+	} else {
+        printf("No directories found.\n");
+    }
+
+	globfree(&glob_results);
+
     cmor_pop_traceback();
     return (0);
 }
