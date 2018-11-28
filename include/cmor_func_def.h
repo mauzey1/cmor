@@ -58,7 +58,8 @@ extern int cmor_CreateFromTemplateWithVersion(int vid, char *templateSTH, char *
 
 extern int cmor_addVersion(void);
 
-extern int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir);
+extern int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, 
+										char *outdir, int dayRange);
 
 extern int cmor_set_associated_file(int var_id, int nVarRefTblID );
 

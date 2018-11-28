@@ -4444,7 +4444,8 @@ int cmor_write(int var_id, void *data, char type, char *file_suffix,
             ierr +=
               cmor_CreateFromTemplate(nVarRefTblID, szPathTemplate, msg, "/");
         }
-        ierr += cmor_checkForOlderVersions(nVarRefTblID, szPathTemplate, cmor_current_dataset.outpath);
+        ierr += cmor_checkForOlderVersions(nVarRefTblID, szPathTemplate, 
+                                            cmor_current_dataset.outpath, 3);
 
         if (ierr != 0) {
             sprintf(ctmp,
@@ -5701,7 +5702,7 @@ int cmor_addVersion()
 /************************************************************************/
 /*                          cmor_checkForOlderVersions()                */
 /************************************************************************/
-int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir)
+int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir, int dayRange)
 {
     char dir_wildcard[CMOR_MAX_STRING];
     char dir_strptime[CMOR_MAX_STRING];
@@ -5771,23 +5772,31 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
                 dir_tm.tm_sec = 0;
                 dir_time = mktime(&dir_tm);
                 days_diff = (int)(difftime(cur_time, dir_time)/(24*60*60));
-                if (cur_time != dir_time && 0 < days_diff && days_diff <= 2) {
-                    printf("%u\n", cur_time);
-                    printf("%u\n", dir_time);
-                    printf("%u\n", days_diff);
-                    printf("%s is within 2 days of %s.\n",
-                            glob_results.gl_pathv[i], cur_version);
+                if (cur_time != dir_time && 0 < days_diff && days_diff <= dayRange) {
+                    if(dayRange == 1) {
+                        snprintf(msg, CMOR_MAX_STRING, 
+                                "Existing directory %s\n"
+                                "! is within 1 day of current version %s.\n",
+                                glob_results.gl_pathv[i], cur_version);
+                    } else {
+                        snprintf(msg, CMOR_MAX_STRING,
+                                "Existing directory %s\n"
+                                "! is within %d days of current version %s.\n",
+                                glob_results.gl_pathv[i], dayRange, cur_version);
+                    }
+                    cmor_handle_error(msg, CMOR_NORMAL);
+                    ierr = 1;
                 }
             }
         }
 	} else {
-        printf("No directories found.\n");
+        ierr = 0;
     }
 
 	globfree(&glob_results);
 
     cmor_pop_traceback();
-    return (0);
+    return (ierr);
 }
 
 /************************************************************************/
