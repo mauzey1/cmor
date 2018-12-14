@@ -5637,6 +5637,9 @@ int cmor_CreateFromTemplateWithVersion(int nVarRefTblID, char *templateSTH,
             strcpy(szInternalAtt, GLOBAL_INTERNAL);
             strncat(szInternalAtt, szToken, strlen(szToken));
             if (cmor_has_cur_dataset_attribute(szInternalAtt) == 0) {
+/* -------------------------------------------------------------------- */
+/*      Use the version provided by the argument                        */
+/* -------------------------------------------------------------------- */
                 if (strcmp(szInternalAtt, GLOBAL_ATT_VERSION) == 0) {
                     strncat(szJoin, version, CMOR_MAX_STRING);
                     strcat(szJoin, separator);
@@ -5702,7 +5705,8 @@ int cmor_addVersion()
 /************************************************************************/
 /*                          cmor_checkForOlderVersions()                */
 /************************************************************************/
-int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir, int dayRange)
+int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, 
+                                char *outdir, int dayRange)
 {
     char dir_wildcard[CMOR_MAX_STRING];
     char dir_strptime[CMOR_MAX_STRING];
@@ -5725,6 +5729,7 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
     strcpy(cur_version, "");
     strcpy(msg, "");
 
+    // initialize directory path patterns for glob and strptime
     strncpytrim(dir_wildcard, outdir, CMOR_MAX_STRING);
     if ((strlen(dir_wildcard) > 0) && (dir_wildcard[strlen(dir_wildcard)] != '/')) {
         strncat(dir_wildcard, "/", CMOR_MAX_STRING);
@@ -5735,11 +5740,14 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
         strncat(dir_strptime, "/", CMOR_MAX_STRING);
     }
 
-    cmor_CreateFromTemplateWithVersion(nVarRefTblID, templateSTH, dir_wildcard, "/", "*");
-    cmor_CreateFromTemplateWithVersion(nVarRefTblID, templateSTH, dir_strptime, "/", "v%Y%m%d");
+    cmor_CreateFromTemplateWithVersion(nVarRefTblID, templateSTH, 
+                                        dir_wildcard, "/", "*");
+    cmor_CreateFromTemplateWithVersion(nVarRefTblID, templateSTH, 
+                                        dir_strptime, "/", "v%Y%m%d");
 
 	ierr = glob(dir_wildcard, glob_flags, NULL, &glob_results);
     if (ierr != GLOB_NOMATCH) {
+        // stop if glob encounters a problem
         if (ierr != 0) {
             switch (ierr) {
                 case GLOB_NOSPACE:
@@ -5757,6 +5765,7 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
             return (1);
         }
                     
+        // get the date of the current version
         cmor_get_cur_dataset_attribute(GLOBAL_ATT_VERSION, cur_version);
         time_res = strptime(cur_version, "v%Y%m%d", &cur_tm);
         cur_tm.tm_hour = 0;
@@ -5764,6 +5773,10 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
         cur_tm.tm_sec = 0;
         cur_time = mktime(&cur_tm);
 
+        /* -------------------------------------------------------------------- */
+        /*      Throw an error if a directory is found with a version           */
+        /*      that is within dayRange days of the current version             */
+        /* -------------------------------------------------------------------- */
         for (i = 0; i < glob_results.gl_pathc; i++) {
             time_res = strptime(glob_results.gl_pathv[i], dir_strptime, &dir_tm);
             if(time_res != NULL) {
@@ -5772,7 +5785,9 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
                 dir_tm.tm_sec = 0;
                 dir_time = mktime(&dir_tm);
                 days_diff = (int)(difftime(cur_time, dir_time)/(24*60*60));
-                if (cur_time != dir_time && 0 < days_diff && days_diff <= dayRange) {
+                if (cur_time != dir_time 
+                    && 0 < days_diff 
+                    && days_diff <= dayRange) {
                     if(dayRange == 1) {
                         snprintf(msg, CMOR_MAX_STRING, 
                                 "Existing directory %s\n"
@@ -5785,7 +5800,6 @@ int cmor_checkForOlderVersions(int nVarRefTblID, char *templateSTH, char *outdir
                                 glob_results.gl_pathv[i], dayRange, cur_version);
                     }
                     cmor_handle_error(msg, CMOR_NORMAL);
-                    ierr = 1;
                 }
             }
         }
