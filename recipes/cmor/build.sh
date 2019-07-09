@@ -13,6 +13,7 @@ fi
 if [[ `uname` == "Linux" ]]; then
     export LDSHARED_FLAGS="-shared -pthread"
 else
+    export CFLAGS="-Wl,-syslibroot / -isysroot / $(CFLAGS)"
     export LDSHARED_FLAGS="-bundle -undefined dynamic_lookup"
 fi
 
