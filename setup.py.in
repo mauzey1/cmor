@@ -47,6 +47,12 @@ for p in include_dirs:
       ld.append(p)
 include_dirs=ld
 
+# ------------------------------------------------------
+# Only for circleci we need to reset the clang root path
+# ------------------------------------------------------
+if os.getenv("HOME") in ['/Users/distiller']:
+  os.environ["CFLAGS"]="-isysroot / -Wl,-syslibroot / "
+
 print('Setting up python module with:')
 print('libraries:',libraries)
 print('libdir:',library_dirs)
