@@ -29,7 +29,7 @@ requirements:
     - openblas 0.3.6
     - libnetcdf 4.7.1
     - netcdf4
-    - numpy 1.14
+    - numpy
     - setuptools
   run:
     - python {{ python }}
@@ -41,7 +41,7 @@ requirements:
     - openblas 0.3.6
     - libnetcdf 4.7.1
     - netcdf4
-    - numpy 1.14
+    - numpy
 
 about:
     home:  http://gitub.com/PCMDI
