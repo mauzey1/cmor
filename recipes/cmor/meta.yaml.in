@@ -41,7 +41,7 @@ requirements:
     - openblas 0.3.6
     - libnetcdf 4.7.1
     - netcdf4
-    - numpy
+    - {{ pin_compatible('numpy') }}
 
 about:
     home:  http://gitub.com/PCMDI
