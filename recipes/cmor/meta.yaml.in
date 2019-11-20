@@ -37,11 +37,11 @@ requirements:
     - udunits2
     - six
     - json-c
+    - hdf5
     - openblas 0.3.6
     - libnetcdf 4.7.1
-    - {{ pin_compatible('numpy') }}
-    - {{ pin_compatible('hdf5') }}
-    - {{ pin_compatible('netcdf4') }}
+    - netcdf4
+    - numpy
 
 about:
     home:  http://gitub.com/PCMDI
