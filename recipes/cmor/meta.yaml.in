@@ -26,7 +26,7 @@ requirements:
     - six
     - json-c
     - hdf5
-    - openblas
+    - openblas 0.3.6
     - libnetcdf
     - netcdf4
     - numpy 1.14
@@ -38,7 +38,7 @@ requirements:
     - six
     - json-c
     - hdf5
-    - openblas
+    - openblas 0.3.6
     - libnetcdf
     - netcdf4
     - numpy 1.14
