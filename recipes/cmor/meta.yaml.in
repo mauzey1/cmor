@@ -4,7 +4,7 @@ package:
 
 source:
     git_rev: @UVCDAT_BRANCH@
-    git_url: git://github.com/PCMDI/cmor.git
+    git_url: git://github.com/mauzey1/cmor.git
 
 build:
   number: @BUILD_NUMBER@
@@ -37,10 +37,10 @@ requirements:
     - udunits2
     - six
     - json-c
-    - {{ pin_compatible('openblas') }}
+    - openblas
+    - libnetcdf
     - {{ pin_compatible('numpy') }}
     - {{ pin_compatible('hdf5') }}
-    - {{ pin_compatible('libnetcdf') }}
     - {{ pin_compatible('netcdf4') }}
 
 about:
