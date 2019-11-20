@@ -27,7 +27,7 @@ requirements:
     - json-c
     - hdf5
     - openblas 0.3.6
-    - libnetcdf
+    - libnetcdf 4.7.1
     - netcdf4
     - numpy 1.14
     - setuptools
@@ -39,7 +39,7 @@ requirements:
     - json-c
     - hdf5
     - openblas 0.3.6
-    - libnetcdf
+    - libnetcdf 4.7.1
     - netcdf4
     - numpy 1.14
 
