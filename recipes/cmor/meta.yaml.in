@@ -26,8 +26,8 @@ requirements:
     - six
     - json-c
     - hdf5
-    - openblas 0.3.6
-    - libnetcdf 4.7.1
+    - openblas
+    - libnetcdf
     - netcdf4
     - numpy >=1.14
     - setuptools
@@ -38,10 +38,12 @@ requirements:
     - six
     - json-c
     - hdf5
-    - openblas 0.3.6
-    - libnetcdf 4.7.1
+    - openblas
+    - libnetcdf
     - netcdf4
     - numpy >=1.14
+  run_constrained:
+    - cdms2
 
 about:
     home:  http://gitub.com/PCMDI
