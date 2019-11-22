@@ -29,7 +29,7 @@ requirements:
     - openblas 0.3.6
     - libnetcdf
     - netcdf4
-    - numpy >=1.14
+    - numpy >=1.14.6
     - setuptools
   run:
     - python {{ python }}
