@@ -1,0 +1,195 @@
+#!/usr/bin/env python
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import numpy as np
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+BUILD_DIRS = sorted(REPO_ROOT.glob("build/lib.*"))
+if not BUILD_DIRS:
+    raise RuntimeError("Could not find a built CMOR Python package under build/lib.*")
+
+sys.path.insert(0, str(BUILD_DIRS[0]))
+
+import cmor  # noqa: E402
+
+TABLES_PATH = REPO_ROOT / "cmip7-cmor-tables" / "tables"
+CV_PATH = REPO_ROOT / "TestTables" / "CMIP7_CV.json"
+CV_PATH_REL = str(CV_PATH.relative_to(REPO_ROOT))
+
+BASE_USER_INPUT = {
+    "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
+    "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json",
+    "_cmip7_option": 1,
+    "_controlled_vocabulary_file": CV_PATH_REL,
+    "activity_id": "CMIP",
+    "archive_id": "WCRP",
+    "calendar": "360_day",
+    "cv_version": "6.2.19.0",
+    "drs_specs": "MIP-DRS7",
+    "experiment_id": "piControl",
+    "forcing_index": "f30",
+    "frequency": "mon",
+    "grid_label": "gn",
+    "host_collection": "CMIP7",
+    "initialization_index": "i000001d",
+    "institution_id": "PCMDI",
+    "license_id": "CC BY 4.0",
+    "nominal_resolution": "250 km",
+    "physics_index": "p1",
+    "realization_index": "r009",
+    "region": "glb",
+    "source_id": "PCMDI-test-1-0",
+    "tracking_prefix": "hdl:21.14100",
+}
+
+
+def configure_dataset(workdir: Path, overrides: dict | None = None) -> Path:
+    workdir.mkdir(parents=True, exist_ok=True)
+    outdir = workdir / "out"
+    outdir.mkdir(parents=True, exist_ok=True)
+
+    user_input = dict(BASE_USER_INPUT)
+    user_input["outpath"] = str(outdir)
+    if overrides:
+        user_input.update(overrides)
+
+    input_path = workdir / "input.json"
+    input_path.write_text(json.dumps(user_input, indent=2, sort_keys=True))
+
+    cmor.setup(inpath=str(TABLES_PATH), netcdf_file_action=cmor.CMOR_REPLACE)
+    if cmor.dataset_json(str(input_path)) != 0:
+        raise RuntimeError("cmor.dataset_json failed")
+    return input_path
+
+
+def close_dataset(var_id: int) -> str:
+    file_path = cmor.close(var_id, file_name=True)
+    cmor.close()
+    return file_path
+
+
+def lat_lon_axes() -> tuple[int, int]:
+    lat = np.array([10.0, 20.0, 30.0], dtype="d")
+    lat_bnds = np.array([5.0, 15.0, 25.0, 35.0], dtype="d")
+    lon = np.array([0.0, 90.0, 180.0, 270.0], dtype="d")
+    lon_bnds = np.array([-45.0, 45.0, 135.0, 225.0, 315.0], dtype="d")
+
+    lat_id = cmor.axis(
+        table_entry="latitude",
+        units="degrees_north",
+        coord_vals=lat,
+        cell_bounds=lat_bnds,
+    )
+    lon_id = cmor.axis(
+        table_entry="longitude",
+        units="degrees_east",
+        coord_vals=lon,
+        cell_bounds=lon_bnds,
+    )
+    return lat_id, lon_id
+
+
+def time_axis() -> int:
+    time = np.array([15.5, 45.5], dtype="d")
+    time_bnds = np.array([0.0, 31.0, 60.0], dtype="d")
+    return cmor.axis(
+        table_entry="time",
+        units="days since 2018",
+        coord_vals=time,
+        cell_bounds=time_bnds,
+    )
+
+
+def height2m_axis() -> int:
+    return cmor.axis(
+        table_entry="height2m",
+        units="m",
+        coord_vals=np.array((2.0,), dtype="d"),
+    )
+
+
+def plev19_axis() -> int:
+    plev19 = np.array(
+        [
+            100000.0,
+            92500.0,
+            85000.0,
+            70000.0,
+            60000.0,
+            50000.0,
+            40000.0,
+            30000.0,
+            25000.0,
+            20000.0,
+            15000.0,
+            10000.0,
+            7000.0,
+            5000.0,
+            3000.0,
+            2000.0,
+            1000.0,
+            500.0,
+            100.0,
+        ],
+        dtype="d",
+    )
+    return cmor.axis(table_entry="plev19", units="Pa", coord_vals=plev19)
+
+
+def standard_hybrid_sigma_axis() -> tuple[int, np.ndarray, np.ndarray, float, np.ndarray]:
+    lev = np.array([0.92, 0.72, 0.50, 0.30, 0.10], dtype="d")
+    lev_bnds = np.array([1.00, 0.83, 0.61, 0.40, 0.20, 0.00], dtype="d")
+    a_vals = np.array([0.12, 0.22, 0.30, 0.20, 0.10], dtype="d")
+    b_vals = np.array([0.80, 0.50, 0.20, 0.10, 0.00], dtype="d")
+    p0_val = 100000.0
+    ps_vals = np.array(
+        [
+            [
+                [97000.0, 97400.0, 97800.0, 98200.0],
+                [98600.0, 99000.0, 99400.0, 99800.0],
+                [100200.0, 100600.0, 101000.0, 101400.0],
+            ],
+            [
+                [97100.0, 97500.0, 97900.0, 98300.0],
+                [98700.0, 99100.0, 99500.0, 99900.0],
+                [100300.0, 100700.0, 101100.0, 101500.0],
+            ],
+        ],
+        dtype="f",
+    )
+
+    lev_id = cmor.axis(
+        table_entry="standard_hybrid_sigma",
+        units="1",
+        coord_vals=lev,
+        cell_bounds=lev_bnds,
+    )
+    a_bnds = np.array([0.06, 0.18, 0.26, 0.25, 0.15, 0.00], dtype="d")
+    b_bnds = np.array([0.94, 0.65, 0.35, 0.15, 0.05, 0.00], dtype="d")
+
+    _ = cmor.zfactor(
+        zaxis_id=lev_id,
+        zfactor_name="a",
+        axis_ids=[lev_id],
+        zfactor_values=a_vals,
+        zfactor_bounds=a_bnds,
+    )
+    _ = cmor.zfactor(
+        zaxis_id=lev_id,
+        zfactor_name="b",
+        axis_ids=[lev_id],
+        zfactor_values=b_vals,
+        zfactor_bounds=b_bnds,
+    )
+    _ = cmor.zfactor(
+        zaxis_id=lev_id,
+        zfactor_name="p0",
+        units="Pa",
+        zfactor_values=p0_val,
+    )
+    return lev_id, a_vals, b_vals, p0_val, ps_vals
