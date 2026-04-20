@@ -4,7 +4,13 @@
 
 This guide describes how CMOR in this repository turns CMIP7 user input into NetCDF datasets. It is aimed at application developers who need to build a driver that produces CMIP7 output while keeping most logic in JSON metadata, table selection, coordinate definitions, and array writes.
 
-The guide is based on the CMIP7 tables in this repository, the CMIP7 controlled vocabulary file used by the tests, and generated NetCDF outputs inspected with `ncdump -h`.
+The worked examples in `wiki/` use the published CMIP7 controlled vocabulary file:
+
+```text
+cmip7-cmor-tables/tables-cvs/cmor-cvs.json
+```
+
+In the current repository state, loading that CV emits two non-fatal validation warnings about the `Conventions` and `drs_specs` entries. CMOR still writes the example files successfully.
 
 ## Mental Model
 
@@ -35,20 +41,20 @@ The dataset JSON is where the driver declares dataset identity, output location,
 - the controlled vocabulary, coordinate, and formula-term files
 - dataset identity such as `activity_id`, `experiment_id`, `institution_id`, and `source_id`
 - the RIPF components used to build `variant_label`
-- `grid_label`, `region`, `frequency`, and `outpath`
+- `drs_specs`, `grid_label`, `region`, `frequency`, and `outpath`
 
 ### Controlled Vocabulary
 
 The CMIP7 controlled vocabulary does three main jobs:
 
-- validates controlled values such as `activity_id`, `experiment_id`, `grid_label`, `license_id`, and the RIPF indices
+- validates controlled values such as `activity_id`, `experiment_id`, `grid_label`, `institution_id`, `license_id`, and the RIPF indices
 - expands identifiers into descriptive metadata such as `institution`, `source`, `experiment`, `description`, and `license`
 - provides the DRS directory and filename templates used to build the final output path
 
-The CMIP7 directory template in the sample CV is:
+The directory template in the published CMIP7 CV is:
 
 ```text
-<mip_era><activity_id><source_id><region><frequency><experiment_id><variant_label><variable_id><branding_suffix><grid_label><version>
+<drs_specs><mip_era><activity_id><institution_id><source_id><experiment_id><variant_label><region><frequency><variable_id><branding_suffix><grid_label><version>
 ```
 
 The filename template is:
@@ -81,37 +87,37 @@ That is why the driver normally supplies the branded table entry once rather tha
 
 ## User Input Reference
 
-The table below summarizes the main inputs a CMIP7 driver is expected to manage.
+The table below summarizes the main inputs used by the examples in this guide.
 
 | Input | Use in output | Required? | Notes |
 | --- | --- | --- | --- |
 | `_cmip7_option` | Enables CMIP7 metadata handling | Yes | Use `1` for the CMIP7 workflow in this repository |
-| `_controlled_vocabulary_file` | Selects the CMIP7 controlled vocabulary JSON | Yes | Set this explicitly to the CV file used by the driver |
+| `_controlled_vocabulary_file` | Selects the CMIP7 controlled vocabulary JSON | Yes | The examples use `cmip7-cmor-tables/tables-cvs/cmor-cvs.json` |
 | `_AXIS_ENTRY_FILE` | Selects the coordinate table | Yes | Use `CMIP7_coordinate.json` |
 | `_FORMULA_VAR_FILE` | Selects the formula-term table | Required when formula terms are needed | Use `CMIP7_formula_terms.json` |
 | `activity_id` | Global attribute and DRS token | Yes | Must exist in the CV |
-| `archive_id` | Global attribute | Required by the sample CV used here | Examples use `WCRP` |
-| `experiment_id` | Global attribute and DRS token | Yes | The CV also expands `experiment` and `description` |
-| `institution_id` | Global attribute input | Yes | CMOR derives `institution` from the CV |
-| `source_id` | Global attribute and DRS token | Yes | CMOR derives `source`, `label`, and `label_extended` from the CV |
-| `realization_index` | Part of `variant_label` | Yes for normal model output | Combined with initialization, physics, and forcing indices |
-| `initialization_index` | Part of `variant_label` | Yes for normal model output | Sample value: `i000001d` |
-| `physics_index` | Part of `variant_label` | Yes for normal model output | Sample value: `p1` |
-| `forcing_index` | Part of `variant_label` | Yes for normal model output | Sample value: `f30` |
-| `grid_label` | Global attribute and DRS token | Yes | Must exist in the CV |
+| `experiment_id` | Global attribute and DRS token | Yes | The examples use `amip` because it does not require parent metadata |
+| `institution_id` | Global attribute and DRS token | Yes | Must exist in the CV |
+| `source_id` | Global attribute and DRS token | Yes | Must exist in the CV |
+| `realization_index` | Part of `variant_label` | Yes | Example value: `r9` |
+| `initialization_index` | Part of `variant_label` | Yes | Example value: `i1` |
+| `physics_index` | Part of `variant_label` | Yes | Example value: `p1` |
+| `forcing_index` | Part of `variant_label` | Yes | Example value: `f3` |
+| `drs_specs` | Global attribute and DRS token | Yes | The examples use `MIP-DRS7` |
+| `mip_era` | Global attribute and DRS token | Yes for the example set | The examples use `CMIP7` |
+| `grid_label` | Global attribute and DRS token | Yes | The published demo CV currently accepts values such as `g999` |
 | `nominal_resolution` | Global attribute | Yes | Must exist in the CV |
-| `region` | Global attribute and DRS token | Yes in the sample CV | Examples use `glb` |
-| `license_id` | Used to build `license` | Yes in the sample CV | CMOR expands the full text from the CV |
+| `region` | Global attribute and DRS token | Yes | The examples use `glb` |
+| `license_id` | Used to build `license` | Yes | The published demo CV uses values such as `CC-BY-4.0` |
 | `calendar` | Time-axis metadata | Required for time-varying output | Examples use `360_day` |
-| `frequency` | Global attribute and DRS token | Required for time-varying output | Use `fx` for fixed fields if the DRS should carry a fixed-field frequency |
+| `frequency` | Global attribute and DRS token | Required for time-varying output | Use `fx` for fixed fields |
 | `outpath` | Filesystem root for output | Yes | CMOR creates the rest of the DRS path under this location |
-| `tracking_prefix` | Prefix for `tracking_id` | Optional | If omitted, CMOR still creates a tracking id |
+| `tracking_prefix` | Prefix for `tracking_id` | Optional but typically set | The examples use `hdl:21.14107` because it matches the published CV regex |
 | `output_path_template` | Overrides the CV directory template | No | Use only when a custom path is required |
 | `output_file_template` | Overrides the CV filename template | No | Use only when a custom filename is required |
 | `_history_template` | Overrides default history text | No | Usually not needed |
-| `further_info_url` | Supplies or overrides further-information metadata | No | Only needed when the chosen CV rules require it |
-| `branch_time_in_child` | Parent-lineage metadata | Conditional | Required when the selected experiment has a parent branch |
-| `branch_time_in_parent` | Parent-lineage metadata | Conditional | Required when the selected experiment has a parent branch |
+| `branch_time_in_child` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
+| `branch_time_in_parent` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
 | `parent_activity_id` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
 | `parent_experiment_id` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
 | `parent_source_id` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
@@ -130,7 +136,6 @@ Drivers normally do not need to set these fields directly:
 - `horizontal_label`
 - `area_label`
 - `variant_label`
-- `member_id`
 - `institution`
 - `source`
 - `realm`
@@ -139,8 +144,8 @@ Drivers normally do not need to set these fields directly:
 - `creation_date`
 - `tracking_id`
 - `variable_id`
-- `table_id`
 - `license`
+- `title`
 - `version`
 
 The most important derived identifier is `variant_label`, which is built from:
@@ -149,10 +154,10 @@ The most important derived identifier is `variant_label`, which is built from:
 realization_index + initialization_index + physics_index + forcing_index
 ```
 
-With the sample inputs used in the example pages:
+With the example inputs used here:
 
 ```text
-r009 + i000001d + p1 + f30 -> r009i000001dp1f30
+r9 + i1 + p1 + f3 -> r9i1p1f3
 ```
 
 ## Coordinate and Grid Families
@@ -208,23 +213,23 @@ Those cases require the driver to define the grid and its auxiliary coordinates 
 
 ## Output Naming Rules
 
-CMOR uses the directory and filename templates from the CMIP7 controlled vocabulary unless the driver overrides them.
+CMOR uses the directory and filename templates from the published CMIP7 controlled vocabulary unless the driver overrides them.
 
-With the sample monthly inputs used here, a monthly ocean surface field resolves to:
+With the example monthly inputs used here, a monthly ocean surface field resolves to:
 
 ```text
 directory:
-CMIP7/CMIP/PCMDI-test-1-0/glb/mon/piControl/r009i000001dp1f30/tos/tavg-u-hxy-sea/gn/vYYYYMMDD/
+MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/vYYYYMMDD/
 
 filename:
-tos_tavg-u-hxy-sea_mon_glb_gn_PCMDI-test-1-0_piControl_r009i000001dp1f30_YYYYMM-YYYYMM.nc
+tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_YYYYMM-YYYYMM.nc
 ```
 
-For fixed fields, the `frequency` token can be set to `fx` so the DRS path and filename remain explicitly time-independent:
+For fixed fields, `frequency = fx` produces an explicit fixed-field DRS path and filename:
 
 ```text
-CMIP7/CMIP/PCMDI-test-1-0/glb/fx/piControl/r009i000001dp1f30/rootd/ti-u-hxy-lnd/gn/vYYYYMMDD/
-rootd_ti-u-hxy-lnd_fx_glb_gn_PCMDI-test-1-0_piControl_r009i000001dp1f30.nc
+MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/vYYYYMMDD/
+rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
 ```
 
 ## Example Pages
@@ -244,21 +249,22 @@ The full worked examples are kept in separate files so each case can include the
 
 Parent metadata is conditional. It depends on the experiment entry selected in the controlled vocabulary.
 
-In the sample CV used here:
+In the published CMIP7 CV used by these examples:
 
-- `piControl` has no parent experiment
-- `historical` names `piControl` as its parent
+- `amip` has no parent experiment
+- `piControl` names `piControl-spinup` as its parent
 
 That means:
 
-- a `piControl` dataset should not include parent attributes
-- a dataset whose experiment entry names a parent must include the required `parent_*` and `branch_*` fields
+- the `amip` examples in this guide do not need `parent_*` or `branch_*` fields
+- a dataset whose experiment entry names a parent must include the required lineage metadata
 
 ## Practical Rules for Driver Authors
 
 - Keep dataset JSON focused on dataset identity, output location, and explicit overrides.
 - Use branded CMIP7 variable names from the tables rather than rebuilding CMIP7 labels by hand.
 - Set the CMIP7 file selections explicitly: `_controlled_vocabulary_file`, `_AXIS_ENTRY_FILE`, and `_FORMULA_VAR_FILE`.
+- Use CV-valid identifiers for `institution_id`, `source_id`, `grid_label`, `license_id`, and `tracking_prefix`.
 - Supply `frequency` for time-varying variables, and use `fx` when a fixed-field DRS is intended.
 - Let the controlled vocabulary expand `institution`, `source`, `experiment`, and `license` instead of copying those strings into the driver.
 - Read the coordinate entry carefully for hybrid or specialized vertical coordinates and create every required formula-term variable.

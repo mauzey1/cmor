@@ -18,7 +18,7 @@ sys.path.insert(0, str(BUILD_DIRS[0]))
 import cmor  # noqa: E402
 
 TABLES_PATH = REPO_ROOT / "cmip7-cmor-tables" / "tables"
-CV_PATH = REPO_ROOT / "TestTables" / "CMIP7_CV.json"
+CV_PATH = REPO_ROOT / "cmip7-cmor-tables" / "tables-cvs" / "cmor-cvs.json"
 CV_PATH_REL = str(CV_PATH.relative_to(REPO_ROOT))
 
 BASE_USER_INPUT = {
@@ -27,24 +27,22 @@ BASE_USER_INPUT = {
     "_cmip7_option": 1,
     "_controlled_vocabulary_file": CV_PATH_REL,
     "activity_id": "CMIP",
-    "archive_id": "WCRP",
     "calendar": "360_day",
-    "cv_version": "6.2.19.0",
     "drs_specs": "MIP-DRS7",
-    "experiment_id": "piControl",
-    "forcing_index": "f30",
+    "experiment_id": "amip",
+    "forcing_index": "f3",
     "frequency": "mon",
-    "grid_label": "gn",
-    "host_collection": "CMIP7",
-    "initialization_index": "i000001d",
-    "institution_id": "PCMDI",
-    "license_id": "CC BY 4.0",
-    "nominal_resolution": "250 km",
+    "grid_label": "g999",
+    "initialization_index": "i1",
+    "institution_id": "MOHC",
+    "license_id": "CC-BY-4.0",
+    "mip_era": "CMIP7",
+    "nominal_resolution": "100 km",
     "physics_index": "p1",
-    "realization_index": "r009",
+    "realization_index": "r9",
     "region": "glb",
-    "source_id": "PCMDI-test-1-0",
-    "tracking_prefix": "hdl:21.14100",
+    "source_id": "DUMMY-MODEL",
+    "tracking_prefix": "hdl:21.14107",
 }
 
 
@@ -95,11 +93,11 @@ def lat_lon_axes() -> tuple[int, int]:
 
 
 def time_axis() -> int:
-    time = np.array([15.5, 45.5], dtype="d")
-    time_bnds = np.array([0.0, 31.0, 60.0], dtype="d")
+    time = np.array([15.0, 45.0], dtype="d")
+    time_bnds = np.array([0.0, 30.0, 60.0], dtype="d")
     return cmor.axis(
         table_entry="time",
-        units="days since 2018",
+        units="days since 1979-01-01",
         coord_vals=time,
         cell_bounds=time_bnds,
     )

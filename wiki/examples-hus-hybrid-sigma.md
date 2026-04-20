@@ -6,46 +6,30 @@ Generator script: [example-data-tools/generate_hus_hybrid_sigma.py](example-data
 
 ## Dataset JSON Used
 
-The generated dataset JSON points at a local copy of the controlled vocabulary because this example adds the CMIP7 vertical-label token `al` for atmosphere model levels.
-
 ```json
 {
   "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
   "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json",
   "_cmip7_option": 1,
-  "_controlled_vocabulary_file": "CMIP7_CV_with_model_levels.json",
+  "_controlled_vocabulary_file": "cmip7-cmor-tables/tables-cvs/cmor-cvs.json",
   "activity_id": "CMIP",
-  "archive_id": "WCRP",
   "calendar": "360_day",
-  "cv_version": "6.2.19.0",
   "drs_specs": "MIP-DRS7",
-  "experiment_id": "piControl",
-  "forcing_index": "f30",
+  "experiment_id": "amip",
+  "forcing_index": "f3",
   "frequency": "mon",
-  "grid_label": "gn",
-  "host_collection": "CMIP7",
-  "initialization_index": "i000001d",
-  "institution_id": "PCMDI",
-  "license_id": "CC BY 4.0",
-  "nominal_resolution": "250 km",
+  "grid_label": "g999",
+  "initialization_index": "i1",
+  "institution_id": "MOHC",
+  "license_id": "CC-BY-4.0",
+  "mip_era": "CMIP7",
+  "nominal_resolution": "100 km",
   "outpath": "/tmp/cmor-docs/hus-hybrid/out",
   "physics_index": "p1",
-  "realization_index": "r009",
+  "realization_index": "r9",
   "region": "glb",
-  "source_id": "PCMDI-test-1-0",
-  "tracking_prefix": "hdl:21.14100"
-}
-```
-
-## Additional Controlled-Vocabulary Entry Used
-
-```json
-{
-  "CV": {
-    "vertical_label": {
-      "al": "atmosphere model levels"
-    }
-  }
+  "source_id": "DUMMY-MODEL",
+  "tracking_prefix": "hdl:21.14107"
 }
 ```
 
@@ -59,13 +43,13 @@ The generated dataset JSON points at a local copy of the controlled vocabulary b
 ## Output File
 
 ```text
-/tmp/cmor-docs/hus-hybrid/out/CMIP7/CMIP/PCMDI-test-1-0/glb/mon/piControl/r009i000001dp1f30/hus/tavg-al-hxy-u/gn/v20260419/hus_tavg-al-hxy-u_mon_glb_gn_PCMDI-test-1-0_piControl_r009i000001dp1f30_201801-201802.nc
+/tmp/cmor-docs/hus-hybrid/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/hus/tavg-al-hxy-u/g999/v20260419/hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
 
 ```text
-netcdf hus_tavg-al-hxy-u_mon_glb_gn_PCMDI-test-1-0_piControl_r009i000001dp1f30_201801-201802 {
+netcdf hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902 {
 dimensions:
 	time = UNLIMITED ; // (2 currently)
 	lev = 5 ;
@@ -75,7 +59,7 @@ dimensions:
 variables:
 	double time(time) ;
 		time:bounds = "time_bnds" ;
-		time:units = "days since 2018" ;
+		time:units = "days since 1979-01-01" ;
 		time:calendar = "360_day" ;
 		time:axis = "T" ;
 		time:long_name = "Time Intervals" ;
@@ -136,55 +120,41 @@ variables:
 // global attributes:
 		:Conventions = "CF-1.12" ;
 		:activity_id = "CMIP" ;
-		:archive_id = "WCRP" ;
 		:area_label = "u" ;
 		:branded_variable = "hus_tavg-al-hxy-u" ;
 		:branding_suffix = "tavg-al-hxy-u" ;
-		:creation_date = "2026-04-19T22:33:29Z" ;
-		:cv_version = "6.2.19.0" ;
-		:data_specs_version = "CMIP-7.0.0.0" ;
-		:description = "DECK: pre-industrial control simulation (TODO: add details)" ;
+		:creation_date = "2026-04-19T23:52:24Z" ;
+		:data_specs_version = "MIP-DS7.1.0.0" ;
+		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
-		:experiment = "Simulation of the pre-industrial climate" ;
-		:experiment_id = "piControl" ;
-		:forcing_index = "f30" ;
+		:experiment = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
+		:experiment_id = "amip" ;
+		:forcing_index = "f3" ;
 		:frequency = "mon" ;
-		:grid_label = "gn" ;
-		:history = "2026-04-19T22:33:29Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:grid_label = "g999" ;
+		:history = "2026-04-19T23:52:24Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
 		:horizontal_label = "hxy" ;
-		:host_collection = "CMIP7" ;
-		:initialization_index = "i000001d" ;
-		:institution = "Program for Climate Model Diagnosis and Intercomparison, Lawrence Livermore National Laboratory, Livermore, CA 94550, USA" ;
-		:institution_id = "PCMDI" ;
-		:label = "PCMDI-test 1.0" ;
-		:label_extended = "PCMDI-test 1.0 (This entry is free text for users to contribute verbose information)" ;
-		:license_id = "CC BY 4.0" ;
+		:initialization_index = "i1" ;
+		:institution = "Met Office Hadley Centre" ;
+		:institution_id = "MOHC" ;
+		:license_id = "CC-BY-4.0" ;
 		:mip_era = "CMIP7" ;
-		:nominal_resolution = "250 km" ;
+		:nominal_resolution = "100 km" ;
 		:physics_index = "p1" ;
 		:product = "model-output" ;
-		:realization_index = "r009" ;
+		:realization_index = "r9" ;
 		:realm = "atmos" ;
 		:region = "glb" ;
-		:release_year = "1989" ;
-		:source = "PCMDI-test 1.0 (1989): \n",
-			"aerosol: none\n",
-			"atmos: Earth1.0-gettingHotter (360 x 180 longitude/latitude; 50 levels; top level 0.1 mb)\n",
-			"atmosChem: none\n",
-			"land: Earth1.0\n",
-			"landIce: none\n",
-			"ocean: BlueMarble1.0-warming (360 x 180 longitude/latitude; 50 levels; top grid cell 0-10 m)\n",
-			"ocnBgchem: none\n",
-			"seaIce: Declining1.0-warming (360 x 180 longitude/latitude)" ;
-		:source_id = "PCMDI-test-1-0" ;
+		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
+		:source_id = "DUMMY-MODEL" ;
 		:table_info = "Creation Date:(2026-03-11 08:29:00) MD5:2f9a4e8dc61b12a4346dcc3bd83414b5" ;
 		:temporal_label = "tavg" ;
-		:title = "PCMDI-test-1-0 output prepared for CMIP7" ;
+		:title = "DUMMY-MODEL output prepared for CMIP7" ;
 		:variable_id = "hus" ;
-		:variant_label = "r009i000001dp1f30" ;
+		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "al" ;
-		:license = "CC BY 4.0; CMIP7 data produced by PCMDI is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
+		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
 		:cmor_version = "3.14.1" ;
-		:tracking_id = "hdl:21.14100/5ea144a4-6c22-407f-81a4-70a0d1c082e6" ;
+		:tracking_id = "hdl:21.14107/ed6e688a-8ad0-4ee7-8caa-eab94170f579" ;
 }
 ```
