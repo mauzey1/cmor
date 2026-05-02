@@ -250,6 +250,7 @@ The full worked examples are kept in separate files so each case can include the
 | Example | What it shows | Link |
 | --- | --- | --- |
 | Monthly native-grid ocean field | Basic lat/lon/time dataset on a native grid | [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md) |
+| Monthly ocean field with parent metadata | A parented `piControl` dataset with required `branch_*` and `parent_*` attributes | [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) |
 | Monthly ice-sheet rainfall flux | Multi-realm branding and a masked area label | [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md) |
 | Fixed land field | Time-independent output with `frequency = fx` | [Fixed `rootd`](examples-rootd-fixed.md) |
 | Near-surface scalar height | Singleton vertical coordinate written as a scalar `height` variable | [Scalar-height `tas`](examples-tas-height2m.md) |
@@ -269,6 +270,7 @@ That means:
 
 - the `amip` examples in this guide do not need `parent_*` or `branch_*` fields
 - a dataset whose experiment entry names a parent must include the required lineage metadata
+- [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) shows the complete minimal monthly case with those attributes populated
 
 ## Practical Rules for Driver Authors
 
