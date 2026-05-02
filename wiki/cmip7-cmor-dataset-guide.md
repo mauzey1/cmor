@@ -10,7 +10,18 @@ The worked examples in `wiki/` use the published CMIP7 controlled vocabulary fil
 cmip7-cmor-tables/tables-cvs/cmor-cvs.json
 ```
 
-In the current repository state, loading that CV emits two non-fatal validation warnings about the `Conventions` and `drs_specs` entries. CMOR still writes the example files successfully.
+The example pages in this guide were regenerated on 2026-05-02 with `cmor 3.14.3` from conda-forge. Run-specific values such as `creation_date`, `tracking_id`, and the `v20260501` directory token reflect that generation run.
+
+## Example Environment
+
+The CMIP7 examples in this guide were run from a `cmor-test-env` conda environment created from the task instructions and updated to `cmor 3.14.3`:
+
+```text
+conda create -n cmor-test-env -c conda-forge python=3.13 pyfive udunits2 hdf5plugin cmor=3.14.3 netcdf4
+conda activate cmor-test-env
+```
+
+With that environment and the current CMIP7 tables in this repository, the example runs below complete cleanly and write the documented files without the earlier CV warnings.
 
 ## Mental Model
 

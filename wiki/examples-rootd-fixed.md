@@ -42,7 +42,7 @@ Generator script: [example-data-tools/generate_rootd_fixed.py](example-data-tool
 ## Output File
 
 ```text
-/tmp/cmor-docs/rootd/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/v20260419/rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
+/tmp/cmor-docs/rootd/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/v20260501/rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -82,7 +82,7 @@ variables:
 		:area_label = "lnd" ;
 		:branded_variable = "rootd_ti-u-hxy-lnd" ;
 		:branding_suffix = "ti-u-hxy-lnd" ;
-		:creation_date = "2026-04-19T23:52:24Z" ;
+		:creation_date = "2026-05-02T01:03:57Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -91,7 +91,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "fx" ;
 		:grid_label = "g999" ;
-		:history = "2026-04-19T23:52:24Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-02T01:03:57Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -106,14 +106,14 @@ variables:
 		:region = "glb" ;
 		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
 		:source_id = "DUMMY-MODEL" ;
-		:table_info = "Creation Date:(2026-03-11 08:29:00) MD5:3868d3d245f4899cd4bc575e259d771b" ;
+		:table_info = "Creation Date:(2026-04-21 15:01:29) MD5:bafb8e42cac0efce87531baf8e7d21b2" ;
 		:temporal_label = "ti" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/f6545a3c-8d68-4c1a-a0bf-90c39f33a918" ;
+		:tracking_id = "hdl:21.14107/5e1c5dc0-1290-4fbe-8022-e085eea783d2" ;
 		:variable_id = "rootd" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.14.1" ;
+		:cmor_version = "3.14.3" ;
 }
 ```

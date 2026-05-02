@@ -10,9 +10,10 @@ This document will help guide a developer in making an application that will mak
 
 ## Guidance on creating example files
 
-* Use the mamba to create the 'cmor-test-env' environment if it doesn't exist.
+* Use the conda to create the 'cmor-test-env' environment if it doesn't exist.
 ```
-mamba install -n cmor-test-env -c conda-forge clang_osx-arm64 gfortran_osx-arm64 pyfive udunits2 hdf5plugin
+conda install -n cmor-test-env -c conda-forge pyfive udunits2 hdf5plugin
+conda activate cmor-test-env
 ```
 * Create Python programs for each example that uses CMOR to create a file.
 * Use either NetCDF4 in Python or `ncdump -h ...` in CLI to get header data from files.

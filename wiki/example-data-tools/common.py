@@ -9,13 +9,17 @@ from pathlib import Path
 import numpy as np
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-BUILD_DIRS = sorted(REPO_ROOT.glob("build/lib.*"))
-if not BUILD_DIRS:
-    raise RuntimeError("Could not find a built CMOR Python package under build/lib.*")
-
-sys.path.insert(0, str(BUILD_DIRS[0]))
-
-import cmor  # noqa: E402
+try:
+    import cmor  # noqa: E402
+except ImportError:  # pragma: no cover - fallback for local source-tree runs
+    BUILD_DIRS = sorted(REPO_ROOT.glob("build/lib.*"))
+    if not BUILD_DIRS:
+        raise RuntimeError(
+            "Could not import cmor from the active environment and could not "
+            "find a built CMOR Python package under build/lib.*"
+        )
+    sys.path.insert(0, str(BUILD_DIRS[0]))
+    import cmor  # noqa: E402
 
 TABLES_PATH = REPO_ROOT / "cmip7-cmor-tables" / "tables"
 CV_PATH = REPO_ROOT / "cmip7-cmor-tables" / "tables-cvs" / "cmor-cvs.json"
@@ -44,6 +48,17 @@ BASE_USER_INPUT = {
     "source_id": "DUMMY-MODEL",
     "tracking_prefix": "hdl:21.14107",
 }
+
+
+def cmor_version() -> str:
+    return ".".join(
+        str(part)
+        for part in (
+            cmor.CMOR_VERSION_MAJOR,
+            cmor.CMOR_VERSION_MINOR,
+            cmor.CMOR_VERSION_PATCH,
+        )
+    )
 
 
 def configure_dataset(workdir: Path, overrides: dict | None = None) -> Path:
