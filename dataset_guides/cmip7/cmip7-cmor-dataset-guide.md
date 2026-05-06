@@ -4,7 +4,7 @@
 
 This guide explains how CMOR in this repository turns CMIP7 user input into NetCDF datasets. It is written for application developers who need to decide which fields a driver must collect, which metadata CMOR derives from the CMIP7 tables and controlled vocabulary, and how coordinate or z-factor choices change the final file.
 
-The worked examples are split into separate pages under `wiki/` so each case can include:
+The worked examples are split into separate pages in this directory so each case can include:
 
 - the user-facing dataset JSON
 - the resolved output path
@@ -193,7 +193,7 @@ r9 + i1 + p1 + f3 -> r9i1p1f3
 
 ## Dataset Families Covered By The Examples
 
-The linked examples below show the main dataset shapes covered by this wiki.
+The linked examples below show the main dataset shapes covered by this guide.
 
 | Example family | What changes in the output | Link |
 | --- | --- | --- |
