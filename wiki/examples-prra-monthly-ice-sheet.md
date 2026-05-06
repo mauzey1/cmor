@@ -2,8 +2,6 @@
 
 This example writes `prra_tavg-u-hxy-is`, a monthly rainfall flux over ice-sheet area. It shows that the branded variable controls both the area label and the multi-realm `realm` attribute.
 
-Generator script: [example-data-tools/generate_prra_monthly_ice_sheet.py](example-data-tools/generate_prra_monthly_ice_sheet.py)
-
 ## Dataset JSON Used
 
 ```json

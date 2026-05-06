@@ -2,8 +2,6 @@
 
 This example writes `tas_tavg-h2m-hxy-u`, a monthly near-surface air-temperature field with the `height2m` coordinate. It shows that CMOR converts this vertical coordinate into a scalar `height` variable and records the rewrite in the variable history.
 
-Generator script: [example-data-tools/generate_tas_height2m.py](example-data-tools/generate_tas_height2m.py)
-
 ## Dataset JSON Used
 
 ```json
@@ -37,7 +35,7 @@ Generator script: [example-data-tools/generate_tas_height2m.py](example-data-too
 
 - Table: `CMIP7_atmos.json`
 - Variable entry: `tas_tavg-h2m-hxy-u`
-- Axes supplied by the script: `longitude`, `latitude`, `time`, `height2m`
+- Axes: `longitude`, `latitude`, `time`, `height2m`
 
 ## Output File
 

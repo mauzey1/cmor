@@ -10,10 +10,11 @@ This document will help guide a developer in making an application that will mak
 
 ## Guidance on creating example files
 
-* Use the conda to create the 'cmor-test-env' environment if it doesn't exist.
+* Use the `python3 -m venv` to create the 'cmor-test-env' environment if it doesn't exist.
 ```
-conda install -n cmor-test-env -c conda-forge pyfive udunits2 hdf5plugin
-conda activate cmor-test-env
+python3 -m venv cmor-test-env
+source cmor-test-env/bin/activate
+pip install cmor netcdf4 pyfive hdf5plugin --extra-index-url https://pcmdi.github.io/cmor
 ```
 * Create Python programs for each example that uses CMOR to create a file.
 * Use either NetCDF4 in Python or `ncdump -h ...` in CLI to get header data from files.

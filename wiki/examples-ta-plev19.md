@@ -2,8 +2,6 @@
 
 This example writes `ta_tavg-p19-hxy-air`, a monthly air-temperature field on the standard 19 pressure levels. It shows the pressure-level case where the driver must supply the coordinate values requested by `plev19`.
 
-Generator script: [example-data-tools/generate_ta_pressure_levels.py](example-data-tools/generate_ta_pressure_levels.py)
-
 ## Dataset JSON Used
 
 ```json

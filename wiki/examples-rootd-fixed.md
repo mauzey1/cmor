@@ -2,8 +2,6 @@
 
 This example writes `rootd_ti-u-hxy-lnd`, a time-independent land field. It shows the fixed-field case: no time axis is defined, the branded variable carries `temporal_label = ti`, and the dataset JSON uses `frequency = fx` so the DRS remains explicit about the fixed frequency.
 
-Generator script: [example-data-tools/generate_rootd_fixed.py](example-data-tools/generate_rootd_fixed.py)
-
 ## Dataset JSON Used
 
 ```json

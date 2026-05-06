@@ -2,8 +2,6 @@
 
 This example writes `hus_tavg-al-hxy-u`, a monthly model-level specific-humidity field on a standard hybrid-sigma coordinate. It shows the most complex case in this set: a vertical axis with formula terms, z-factors, and a surface-pressure field stored with the main variable.
 
-Generator script: [example-data-tools/generate_hus_hybrid_sigma.py](example-data-tools/generate_hus_hybrid_sigma.py)
-
 ## Dataset JSON Used
 
 ```json

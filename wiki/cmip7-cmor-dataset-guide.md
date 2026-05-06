@@ -2,28 +2,23 @@
 
 ## Purpose
 
-This guide describes how CMOR in this repository turns CMIP7 user input into NetCDF datasets. It is aimed at application developers who need to build a driver that produces CMIP7 output while keeping most logic in JSON metadata, table selection, coordinate definitions, and array writes.
+This guide explains how CMOR in this repository turns CMIP7 user input into NetCDF datasets. It is written for application developers who need to decide which fields a driver must collect, which metadata CMOR derives from the CMIP7 tables and controlled vocabulary, and how coordinate or z-factor choices change the final file.
 
-The worked examples in `wiki/` use the published CMIP7 controlled vocabulary file:
+The worked examples are split into separate pages under `wiki/` so each case can include:
+
+- the user-facing dataset JSON
+- the resolved output path
+- the full `ncdump -h` header
+
+All examples in this guide use the published CMIP7 controlled vocabulary file:
 
 ```text
 cmip7-cmor-tables/tables-cvs/cmor-cvs.json
 ```
 
-The example pages in this guide were regenerated on 2026-05-02 with `cmor 3.14.3` from conda-forge. Run-specific values such as `creation_date`, `tracking_id`, and the `v20260501` directory token reflect that generation run.
+Run-specific fields such as `creation_date`, `tracking_id`, and the `vYYYYMMDD` version token vary between runs. The structural behavior shown by the examples does not.
 
-## Example Environment
-
-The CMIP7 examples in this guide were run from a `cmor-test-env` conda environment created from the task instructions and updated to `cmor 3.14.3`:
-
-```text
-conda create -n cmor-test-env -c conda-forge python=3.13 pyfive udunits2 hdf5plugin cmor=3.14.3 netcdf4
-conda activate cmor-test-env
-```
-
-With that environment and the current CMIP7 tables in this repository, the example runs below complete cleanly and write the documented files without the earlier CV warnings.
-
-## Mental Model
+## CMORization Workflow
 
 CMOR builds a CMIP7 file from four inputs:
 
@@ -36,20 +31,30 @@ The typical sequence is:
 
 1. Initialize CMOR with the CMIP7 table directory.
 2. Load dataset JSON.
-3. Load one CMIP7 variable table such as `CMIP7_ocean.json`, `CMIP7_atmos.json`, or `CMIP7_land.json`.
-4. Define the axes, and define a grid or z-factors when the chosen variable requires them.
-5. Define the variable using its branded CMIP7 table entry.
-6. Write the data arrays.
-7. Close the variable and let CMOR finalize the output path, filename, and global metadata.
+3. Load the CMIP7 variable table that contains the branded variable.
+4. Define the axes, grid, and z-factors required by that table entry.
+5. Write the data arrays.
+6. Close the variable and let CMOR finalize the output path, filename, and derived global metadata.
 
-## How Metadata Is Derived
+Pseudocode for a driver looks like:
+
+```text
+collect dataset JSON
+select CV + coordinate table + variable table
+select branded variable entry
+define required axes / grid / z-factors
+write data arrays
+close output and record the CMOR-generated path
+```
+
+## Where Metadata Comes From
 
 ### Dataset JSON
 
-The dataset JSON is where the driver declares dataset identity, output location, and any template or metadata overrides. Important examples are:
+The dataset JSON is where the driver declares dataset identity, output location, and any explicit overrides. Typical examples are:
 
 - CMIP7 mode selection with `_cmip7_option`
-- the controlled vocabulary, coordinate, and formula-term files
+- file selections such as `_controlled_vocabulary_file`, `_AXIS_ENTRY_FILE`, and `_FORMULA_VAR_FILE`
 - dataset identity such as `activity_id`, `experiment_id`, `institution_id`, and `source_id`
 - the RIPF components used to build `variant_label`
 - `drs_specs`, `grid_label`, `region`, `frequency`, and `outpath`
@@ -62,15 +67,13 @@ The CMIP7 controlled vocabulary does three main jobs:
 - expands identifiers into descriptive metadata such as `institution`, `source`, `experiment`, `description`, and `license`
 - provides the DRS directory and filename templates used to build the final output path
 
-The directory template in the published CMIP7 CV is:
+The published CMIP7 CV in this repository uses:
 
 ```text
+directory template:
 <drs_specs><mip_era><activity_id><institution_id><source_id><experiment_id><variant_label><region><frequency><variable_id><branding_suffix><grid_label><version>
-```
 
-The filename template is:
-
-```text
+filename template:
 <variable_id><branding_suffix><frequency><region><grid_label><source_id><experiment_id><variant_label>
 ```
 
@@ -94,47 +97,64 @@ For example, the branded variable name `tos_tavg-u-hxy-sea` is split by CMOR int
 - `area_label = sea`
 - `branding_suffix = tavg-u-hxy-sea`
 
-That is why the driver normally supplies the branded table entry once rather than setting each label attribute manually.
+That is why a driver normally supplies the branded table entry once rather than rebuilding those labels by hand.
 
 ## User Input Reference
 
-The table below summarizes the main inputs used by the examples in this guide.
+The tables below summarize the inputs used by the examples in this guide.
 
-| Input | Use in output | Required? | Notes |
+### Core CMIP7 File Selections
+
+| Input | Required? | Default or expected value | Use in output |
 | --- | --- | --- | --- |
-| `_cmip7_option` | Enables CMIP7 metadata handling | Yes | Use `1` for the CMIP7 workflow in this repository |
-| `_controlled_vocabulary_file` | Selects the CMIP7 controlled vocabulary JSON | Yes | The examples use `cmip7-cmor-tables/tables-cvs/cmor-cvs.json` |
-| `_AXIS_ENTRY_FILE` | Selects the coordinate table | Yes | Use `CMIP7_coordinate.json` |
-| `_FORMULA_VAR_FILE` | Selects the formula-term table | Required when formula terms are needed | Use `CMIP7_formula_terms.json` |
-| `activity_id` | Global attribute and DRS token | Yes | Must exist in the CV |
-| `experiment_id` | Global attribute and DRS token | Yes | The examples use `amip` because it does not require parent metadata |
-| `institution_id` | Global attribute and DRS token | Yes | Must exist in the CV |
-| `source_id` | Global attribute and DRS token | Yes | Must exist in the CV |
-| `realization_index` | Part of `variant_label` | Yes | Example value: `r9` |
-| `initialization_index` | Part of `variant_label` | Yes | Example value: `i1` |
-| `physics_index` | Part of `variant_label` | Yes | Example value: `p1` |
-| `forcing_index` | Part of `variant_label` | Yes | Example value: `f3` |
-| `drs_specs` | Global attribute and DRS token | Yes | The examples use `MIP-DRS7` |
-| `mip_era` | Global attribute and DRS token | Yes for the example set | The examples use `CMIP7` |
-| `grid_label` | Global attribute and DRS token | Yes | The published demo CV currently accepts values such as `g999` |
-| `nominal_resolution` | Global attribute | Yes | Must exist in the CV |
-| `region` | Global attribute and DRS token | Yes | The examples use `glb` |
-| `license_id` | Used to build `license` | Yes | The published demo CV uses values such as `CC-BY-4.0` |
-| `calendar` | Time-axis metadata | Required for time-varying output | Examples use `360_day` |
-| `frequency` | Global attribute and DRS token | Required for time-varying output | Use `fx` for fixed fields |
-| `outpath` | Filesystem root for output | Yes | CMOR creates the rest of the DRS path under this location |
-| `tracking_prefix` | Prefix for `tracking_id` | Optional but typically set | The examples use `hdl:21.14107` because it matches the published CV regex |
-| `output_path_template` | Overrides the CV directory template | No | Use only when a custom path is required |
-| `output_file_template` | Overrides the CV filename template | No | Use only when a custom filename is required |
-| `_history_template` | Overrides default history text | No | Usually not needed |
-| `branch_time_in_child` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `branch_time_in_parent` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `parent_activity_id` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `parent_experiment_id` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `parent_source_id` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `parent_time_units` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `parent_variant_label` | Parent-lineage metadata | Conditional | Required when the selected experiment names a parent |
-| `parent_mip_era` | Parent-lineage metadata | Conditional | Use `CMIP7` for CMIP7 parent datasets |
+| `_cmip7_option` | Yes | Use `1` for the CMIP7 workflow in this repository | Enables CMIP7-specific handling |
+| `_controlled_vocabulary_file` | Yes | No implicit default in this guide; examples use `cmip7-cmor-tables/tables-cvs/cmor-cvs.json` | Selects the CMIP7 controlled vocabulary |
+| `_AXIS_ENTRY_FILE` | Yes | No implicit default in this guide; examples use `CMIP7_coordinate.json` | Selects the coordinate definitions |
+| `_FORMULA_VAR_FILE` | Conditional | No implicit default; required only when formula terms are needed | Selects the z-factor and formula-term definitions |
+
+### Dataset Identity and DRS Inputs
+
+| Input | Required? | Default or expected value | Use in output |
+| --- | --- | --- | --- |
+| `activity_id` | Yes | No default; must exist in the CV | Global attribute and DRS token |
+| `experiment_id` | Yes | No default; examples mainly use `amip` | Global attribute, DRS token, and parent-lineage rules |
+| `institution_id` | Yes | No default; must exist in the CV | Global attribute and DRS token |
+| `source_id` | Yes | No default; must exist in the CV | Global attribute and DRS token |
+| `realization_index` | Yes | No default | Builds `variant_label` |
+| `initialization_index` | Yes | No default | Builds `variant_label` |
+| `physics_index` | Yes | No default | Builds `variant_label` |
+| `forcing_index` | Yes | No default | Builds `variant_label` |
+| `drs_specs` | Yes | No default; examples use `MIP-DRS7` | Global attribute and DRS token |
+| `mip_era` | Yes in this example set | Examples use `CMIP7` | Global attribute and DRS token |
+| `grid_label` | Yes | No default; must be CV-valid | Global attribute and DRS token |
+| `nominal_resolution` | Yes | No default; must be CV-valid | Global attribute |
+| `region` | Yes | No default; examples use `glb` | Global attribute and DRS token |
+| `license_id` | Yes | No default; must be CV-valid | Used to derive `license` |
+| `outpath` | Yes | No default | Filesystem root where CMOR creates the DRS tree |
+
+### Time, Tracking, and Override Inputs
+
+| Input | Required? | Default or expected value | Use in output |
+| --- | --- | --- | --- |
+| `calendar` | Required for time-varying output | No default implied by this guide; examples use `360_day` | Time-axis metadata |
+| `frequency` | Required for time-varying output | No general default; use `fx` for fixed fields | Global attribute and DRS token |
+| `tracking_prefix` | Optional | No guide-level default; examples use `hdl:21.14107` | Prefix used when CMOR derives `tracking_id` |
+| `output_path_template` | Optional | If omitted, CMOR uses the CV directory template | Overrides the DRS directory layout |
+| `output_file_template` | Optional | If omitted, CMOR uses the CV filename template | Overrides the DRS filename layout |
+| `_history_template` | Optional | If omitted, CMOR writes its default history string | Overrides the global `history` format |
+
+### Conditional Parent-Lineage Inputs
+
+| Input | Required? | Default or expected value | Use in output |
+| --- | --- | --- | --- |
+| `branch_time_in_child` | Conditional | No default | Parent-lineage metadata |
+| `branch_time_in_parent` | Conditional | No default | Parent-lineage metadata |
+| `parent_activity_id` | Conditional | No default | Parent-lineage metadata |
+| `parent_experiment_id` | Conditional | No default | Parent-lineage metadata |
+| `parent_source_id` | Conditional | No default | Parent-lineage metadata |
+| `parent_time_units` | Conditional | No default | Parent-lineage metadata |
+| `parent_variant_label` | Conditional | No default | Parent-lineage metadata |
+| `parent_mip_era` | Conditional | No default implied by CMOR; CMIP7 examples use `CMIP7` | Parent-lineage metadata |
 
 ## Metadata CMOR Usually Derives
 
@@ -165,17 +185,29 @@ The most important derived identifier is `variant_label`, which is built from:
 realization_index + initialization_index + physics_index + forcing_index
 ```
 
-With the example inputs used here:
+For example:
 
 ```text
 r9 + i1 + p1 + f3 -> r9i1p1f3
 ```
 
-## Coordinate and Grid Families
+## Dataset Families Covered By The Examples
 
-The CMIP7 coordinate tables used in this repository cover several common dataset shapes.
+The linked examples below show the main dataset shapes covered by this wiki.
 
-### Latitude and Longitude
+| Example family | What changes in the output | Link |
+| --- | --- | --- |
+| Monthly native-grid ocean field | Standard `time` + `lat` + `lon` case on a native grid | [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md) |
+| Monthly ocean field with parent metadata | Adds the required `branch_*` and `parent_*` lineage attributes | [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) |
+| Monthly ice-sheet rainfall flux | Shows a branded variable whose `area_label` and `realm` are not the simplest single-realm case | [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md) |
+| Fixed land field | Omits the time axis and uses `frequency = fx` | [Fixed `rootd`](examples-rootd-fixed.md) |
+| Near-surface scalar height | Uses a singleton vertical coordinate written as a scalar `height` variable | [Scalar-height `tas`](examples-tas-height2m.md) |
+| Pressure-level atmosphere field | Uses `plev19` and writes a length-19 pressure coordinate | [Pressure-level `ta`](examples-ta-plev19.md) |
+| Hybrid-sigma atmosphere field | Adds z-factors and formula terms alongside the main variable | [Hybrid-sigma `hus`](examples-hus-hybrid-sigma.md) |
+
+## Coordinate and Grid Patterns
+
+### Native Latitude-Longitude Grids
 
 The standard native-grid case uses:
 
@@ -187,16 +219,13 @@ These become `lat`, `lon`, and `time` variables in the output.
 
 ### Singleton Vertical Coordinates
 
-Some CMIP7 entries use a scalar vertical coordinate rather than a length-N dimension. Examples include:
-
-- `height2m`
-- `h100m`
+Some CMIP7 entries use a scalar vertical coordinate rather than a length-N dimension. Examples include `height2m` and `h100m`.
 
 The `tas_tavg-h2m-hxy-u` example shows that CMOR writes a scalar `height` coordinate and attaches it through the variable `coordinates` attribute.
 
 ### Pressure Levels
 
-Pressure-level variables use coordinate entries such as `plev19`. The driver must supply the requested coordinate values, and CMOR writes the output pressure coordinate metadata from the table definition.
+Pressure-level variables use coordinate entries such as `plev19`. The driver supplies the requested level values, and CMOR writes the pressure-coordinate metadata defined by the CMIP7 table.
 
 ### Hybrid Sigma Coordinates
 
@@ -211,22 +240,15 @@ For `standard_hybrid_sigma`, the output depends on:
 - `ps`
 - the corresponding bounds variables for `a` and `b`
 
-### Rotated, Projected, and Unstructured Grids
+### Other Grid Families
 
-The CMIP7 grid tables also support:
-
-- rotated-pole coordinates
-- projected `x` and `y` coordinates
-- indexed unstructured grids
-- mapping metadata through mapping entries
-
-Those cases require the driver to define the grid and its auxiliary coordinates before the main variable is written.
+The CMIP7 tables in this repository also define rotated, projected, and unstructured horizontal grids. Those follow the same high-level pattern: the driver must define the grid and any auxiliary coordinates before writing the main variable. This example set focuses on native latitude-longitude output plus vertical-coordinate variation.
 
 ## Output Naming Rules
 
-CMOR uses the directory and filename templates from the published CMIP7 controlled vocabulary unless the driver overrides them.
+CMOR uses the directory and filename templates from the CMIP7 controlled vocabulary unless the driver overrides them.
 
-With the example monthly inputs used here, a monthly ocean surface field resolves to:
+With the monthly `tos` example inputs, a time-varying ocean surface field resolves to:
 
 ```text
 directory:
@@ -236,26 +258,12 @@ filename:
 tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_YYYYMM-YYYYMM.nc
 ```
 
-For fixed fields, `frequency = fx` produces an explicit fixed-field DRS path and filename:
+For fixed fields, `frequency = fx` produces a fixed-field DRS path and filename:
 
 ```text
 MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/vYYYYMMDD/
 rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
 ```
-
-## Example Pages
-
-The full worked examples are kept in separate files so each case can include the complete NetCDF header.
-
-| Example | What it shows | Link |
-| --- | --- | --- |
-| Monthly native-grid ocean field | Basic lat/lon/time dataset on a native grid | [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md) |
-| Monthly ocean field with parent metadata | A parented `piControl` dataset with required `branch_*` and `parent_*` attributes | [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) |
-| Monthly ice-sheet rainfall flux | Multi-realm branding and a masked area label | [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md) |
-| Fixed land field | Time-independent output with `frequency = fx` | [Fixed `rootd`](examples-rootd-fixed.md) |
-| Near-surface scalar height | Singleton vertical coordinate written as a scalar `height` variable | [Scalar-height `tas`](examples-tas-height2m.md) |
-| Pressure-level atmosphere field | Standard pressure-level coordinate with `plev19` | [Pressure-level `ta`](examples-ta-plev19.md) |
-| Hybrid-sigma atmosphere field | Hybrid axis plus z-factors and formula terms | [Hybrid-sigma `hus`](examples-hus-hybrid-sigma.md) |
 
 ## Parent Metadata
 
@@ -270,16 +278,16 @@ That means:
 
 - the `amip` examples in this guide do not need `parent_*` or `branch_*` fields
 - a dataset whose experiment entry names a parent must include the required lineage metadata
-- [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) shows the complete minimal monthly case with those attributes populated
+- [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) shows the minimal monthly case with those attributes populated
 
 ## Practical Rules for Driver Authors
 
 - Keep dataset JSON focused on dataset identity, output location, and explicit overrides.
-- Use branded CMIP7 variable names from the tables rather than rebuilding CMIP7 labels by hand.
+- Use branded CMIP7 variable names from the tables rather than rebuilding CMIP7 labels manually.
 - Set the CMIP7 file selections explicitly: `_controlled_vocabulary_file`, `_AXIS_ENTRY_FILE`, and `_FORMULA_VAR_FILE`.
 - Use CV-valid identifiers for `institution_id`, `source_id`, `grid_label`, `license_id`, and `tracking_prefix`.
 - Supply `frequency` for time-varying variables, and use `fx` when a fixed-field DRS is intended.
-- Let the controlled vocabulary expand `institution`, `source`, `experiment`, and `license` instead of copying those strings into the driver.
+- Let the controlled vocabulary expand `institution`, `source`, `experiment`, and `license`.
 - Read the coordinate entry carefully for hybrid or specialized vertical coordinates and create every required formula-term variable.
 - Treat the final NetCDF path and filename as CMOR output, not driver-formatted strings.
 

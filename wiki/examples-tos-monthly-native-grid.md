@@ -2,8 +2,6 @@
 
 This example writes `tos_tavg-u-hxy-sea`, a monthly sea-surface temperature field on a native latitude-longitude grid. It is the simplest complete CMIP7 case in this set: one time axis, one latitude axis, one longitude axis, and no extra grid or formula-term variables.
 
-Generator script: [example-data-tools/generate_tos_monthly_native_grid.py](example-data-tools/generate_tos_monthly_native_grid.py)
-
 ## Dataset JSON Used
 
 ```json

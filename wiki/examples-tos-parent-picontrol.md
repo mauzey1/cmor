@@ -2,8 +2,6 @@
 
 This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and includes the parent-lineage attributes required by the current CMIP7 controlled vocabulary. It shows the simplest parented case in this guide: the same native latitude-longitude monthly ocean field as the basic `tos` example, but with `branch_*` and `parent_*` metadata present in both the dataset JSON and the output file.
 
-Generator script: [example-data-tools/generate_tos_monthly_parent_piControl.py](example-data-tools/generate_tos_monthly_parent_piControl.py)
-
 ## Dataset JSON Used
 
 ```json
