@@ -35,7 +35,7 @@ This example writes `tasmax` from `DRCDP_APday.json` using only `time`, `latitud
 ## Output File
 
 ```text
-/private/tmp/drcdp-guide/tasmax-height2m/out/DRCDP/NAM/UCSD-SIO/LOCA2-1/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260506/tasmax_NAM_UCSD-SIO_LOCA2-1_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20081231-20090101.nc
+/private/tmp/drcdp-guide/tasmax-height2m/out/DRCDP/NAM/UCSD-SIO/LOCA2-1/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260512/tasmax_NAM_UCSD-SIO_LOCA2-1_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20081231-20090101.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -79,11 +79,11 @@ variables:
 	float tasmax(time, lat, lon) ;
 		tasmax:standard_name = "air_temperature" ;
 		tasmax:long_name = "Daily Maximum Near-Surface Air Temperature" ;
-		tasmax:comment = "maximum near-surface (usually, 2 meter) air temperature (add cell_method attribute 'time: max')" ;
+		tasmax:comment = "maximum near-surface (usually, 2 meter) air temperature (add cell_method attribute \'time: max\')" ;
 		tasmax:units = "K" ;
 		tasmax:cell_methods = "area: mean time: maximum" ;
 		tasmax:cell_measures = "area: areacella" ;
-		tasmax:history = "2026-05-06T19:20:25Z altered by CMOR: Treated scalar dimension: 'height'." ;
+		tasmax:history = "2026-05-12T23:11:31Z altered by CMOR: Treated scalar dimension: \'height\'." ;
 		tasmax:coordinates = "height" ;
 		tasmax:missing_value = 1.e+20f ;
 		tasmax:_FillValue = 1.e+20f ;
@@ -92,7 +92,7 @@ variables:
 		:Conventions = "CF-1.7 CMIP-6.5" ;
 		:activity_id = "DRCDP" ;
 		:contact = "Daniel Feldman; DRFeldman@lbl.gov" ;
-		:creation_date = "2026-05-06T19:20:25Z" ;
+		:creation_date = "2026-05-12T23:11:31Z" ;
 		:data_specs_version = "6.5.0.0; mip-cmor-tables; f42386929a0057ed15e66a3bac045b8c00d33c0f" ;
 		:driving_activity_id = "CMIP" ;
 		:driving_experiment_id = "historical" ;
@@ -104,7 +104,7 @@ variables:
 		:further_info_url = "https://loca.ucsd.edu/" ;
 		:grid = "5 x 5 km latitude x longitude" ;
 		:grid_label = "gn" ;
-		:history = "2026-05-06T19:20:25Z; CMOR rewrote data to be consistent with DRCDP, CMIP6, CMIP6Plus and CF-1.7 CMIP-6.5 standards" ;
+		:history = "2026-05-12T23:11:31Z; CMOR rewrote data to be consistent with DRCDP, CMIP6, CMIP6Plus and CF-1.7 CMIP-6.5 standards" ;
 		:institution = "Scripps Institution of Oceanography, University of California, San Diego, 9500 Gilman Drive, La Jolla, CA 92093, USA (ROR: 04v7hvq31)" ;
 		:institution_id = "UCSD-SIO" ;
 		:license_id = "CC BY 4.0" ;
@@ -120,12 +120,12 @@ variables:
 		:source_name = "LOCA" ;
 		:source_version = "2.1" ;
 		:table_id = "APday" ;
-		:table_info = "Creation Date:(2025-09-03) MD5:4a689106f45f8b5c1fbeae6e119fef56" ;
+		:table_info = "Creation Date:(2025-09-03) MD5:9c77819bfbf9392f6157c58b38c2524f" ;
 		:title = "LOCA 2.1 dataset prepared for DRCDP" ;
-		:tracking_id = "hdl:21.14100/8ec55562-6c01-44c4-9dca-a76cf39a47ac" ;
+		:tracking_id = "hdl:21.14100/f639caed-cef7-4156-a6c1-c9699e354079" ;
 		:variable_id = "tasmax" ;
-		:license = "CC BY 4.0; DRDCP data produced by UCSD-SIO is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRCDP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.14.3" ;
+		:license = "CC BY 4.0; DRDCP data produced by UCSD-SIO is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRDCP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
+		:cmor_version = "3.15.0" ;
 }
 ```
 

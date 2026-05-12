@@ -27,7 +27,8 @@ def main() -> None:
     obs4mips_repo = Path(args.obs4mips_repo).resolve()
 
     sites = json.loads((obs4mips_repo / "obs4MIPs_site_id.json").read_text())["site_id"]
-    site = sites["US-ARM-SGP"]
+    site_id = "US-ARM"
+    site = sites[site_id]
     lat = float(site["latitude"])
     lon = float(site["longitude"]) % 360.0
 
@@ -39,7 +40,7 @@ def main() -> None:
         "calendar": "standard",
         "contact": "zhang40@llnl.gov, obs4mips-panel@wcrp-cmip.org",
         "grid": "site",
-        "grid_label": "site",
+        "grid_label": "gn",
         "has_aux_unc": "FALSE",
         "institution_id": "DOE-ARM",
         "license": (
@@ -57,7 +58,7 @@ def main() -> None:
             "best estimate data, Bull. Amer. Meteor. Soc, 91, 13-20, "
             "doi:10.1175/2009BAMS2891.1."
         ),
-        "site_id": "US-ARM-SGP",
+        "site_id": site_id,
         "site_location": site["location"],
         "source_data_url": "https://arm.gov/data/science-data-products/vaps/armbe",
         "source_id": "ARMBE-atm-c1-1-8",

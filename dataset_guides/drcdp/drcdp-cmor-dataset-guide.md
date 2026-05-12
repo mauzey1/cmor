@@ -127,7 +127,7 @@ CMOR itself resolves or finalizes:
 - `creation_date`
 - `history`
 - `tracking_id`
-- the version directory token such as `v20260506`
+- the version directory token such as `v20260512`
 - the filename time range suffix
 
 For the validated DRCDP surface-height variables, CMOR also writes the scalar `height` coordinate automatically from the table metadata. The driver examples only pass `time`, `latitude`, and `longitude` axes for `tasmax`, yet the output contains `height`.
@@ -267,13 +267,12 @@ The raw template in `DRCDP_DRS.json` is stored without literal separators betwee
 Examples from this guide:
 
 - Hourly `pr`:
-  `/private/tmp/drcdp-guide/pr-ap1hr-regular-grid/out/DRCDP/NAM/EPA/EDDE2-0/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/1hr/pr/v20260506/pr_NAM_EPA_EDDE2-0_CMIP6_historical_ACCESS-CM2_r1i1p1f1_1hr_200812312330-200901010030.nc`
+  `/private/tmp/drcdp-guide/pr-ap1hr-regular-grid/out/DRCDP/NAM/EPA/EDDE2-0/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/1hr/pr/v20260512/pr_NAM_EPA_EDDE2-0_CMIP6_historical_ACCESS-CM2_r1i1p1f1_1hr_200812312330-200901010030.nc`
 - Daily `tasmax`:
-  `/private/tmp/drcdp-guide/tasmax-height2m/out/DRCDP/NAM/UCSD-SIO/LOCA2-1/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260506/tasmax_NAM_UCSD-SIO_LOCA2-1_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20081231-20090101.nc`
+  `/private/tmp/drcdp-guide/tasmax-height2m/out/DRCDP/NAM/UCSD-SIO/LOCA2-1/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260512/tasmax_NAM_UCSD-SIO_LOCA2-1_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20081231-20090101.nc`
 
 ## Example Pages
 
 - [Hourly `pr` on rectilinear `lat`/`lon`](examples-pr-ap1hr-regular-grid.md)
 - [Daily `tasmax` with implicit `height2m`](examples-tasmax-height2m.md)
 - [Daily `tasmax` with grid and CRS metadata](examples-tasmax-grid-crs.md)
-

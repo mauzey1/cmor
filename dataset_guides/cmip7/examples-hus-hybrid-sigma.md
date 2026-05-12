@@ -41,7 +41,7 @@ This example writes `hus_tavg-al-hxy-u`, a monthly model-level specific-humidity
 ## Output File
 
 ```text
-/tmp/cmor-docs/hus-hybrid/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/hus/tavg-al-hxy-u/g999/v20260501/hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/hus-hybrid/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/hus/tavg-al-hxy-u/g999/v20260512/hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -121,7 +121,7 @@ variables:
 		:area_label = "u" ;
 		:branded_variable = "hus_tavg-al-hxy-u" ;
 		:branding_suffix = "tavg-al-hxy-u" ;
-		:creation_date = "2026-05-02T01:03:57Z" ;
+		:creation_date = "2026-05-12T23:11:31Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -130,7 +130,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-02T01:03:57Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-12T23:11:31Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -152,7 +152,7 @@ variables:
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "al" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.14.3" ;
-		:tracking_id = "hdl:21.14107/0b39b326-d6fc-4d39-8946-3a3766762b8f" ;
+		:cmor_version = "3.15.0" ;
+		:tracking_id = "hdl:21.14107/57af2a3f-88f6-49af-bed5-50a94bf67e38" ;
 }
 ```

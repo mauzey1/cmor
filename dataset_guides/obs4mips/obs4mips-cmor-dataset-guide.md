@@ -109,7 +109,7 @@ from `obs4MIPs_institution_id.json`.
 
 Point-site workflows use `obs4MIPs_site_id.json` outside the variable tables. In the validated point example:
 
-- `site_id = US-ARM-SGP`
+- `site_id = US-ARM`
 - the driver uses the site registry to obtain latitude and longitude
 - `site_location` is carried as explicit JSON metadata
 
@@ -158,16 +158,18 @@ Some older demo JSON files in the target repository no longer match the current 
 The validated runs in this guide showed:
 
 - the old `CMAP-V1902` demo JSON uses `institution_id = NOAA-ESRL-PSD`, but the current `source_id` registry maps `CMAP-V1902` to `NOAA-NCEI`
-- the old in-situ demo uses `grid_label = US-ARM-SGP`, but that value fails current CV validation
-- `grid_label = site` and `site_id = US-ARM-SGP` work against the current published tables
+- the old in-situ demo uses `grid_label = ARM-SGP`, but that value fails current CV validation
+- the current published CV also rejects `grid_label = site` for the point-site table
+- the validated point-site example works with `grid = site`, `grid_label = gn`, and `site_id = US-ARM`
 
-All three validated runs also emit the same non-fatal table-load warning from CMOR 3.14.3:
+All three validated runs also emit the same non-fatal table-load warnings from CMOR 3.15.0:
 
 ```text
+Warning: Attribute "activity_id" must be an array or object
 Warning: Attribute "license" must be an array or object
 ```
 
-The file is still created successfully, and the `license` global attribute is written from the user JSON.
+The files are still created successfully, and the `license` global attribute is written from the user JSON.
 
 ## User Input Reference
 
@@ -187,7 +189,7 @@ The file is still created successfully, and the `license` global attribute is wr
 | `calendar` | Required for time-varying output | Examples use `standard` |
 | `contact` | Yes | Passed through to the output |
 | `grid` | Yes | User-facing grid description; examples use `1x1 degree latitude x longitude`, `site`, and `5 degree latitude height zonal mean` |
-| `grid_label` | Yes | Must be CV-valid; examples use `gn`, `site`, and `gnz` |
+| `grid_label` | Yes | Must be CV-valid; examples use `gn` and `gnz` |
 | `has_aux_unc` | Yes | Examples use `FALSE` |
 | `institution_id` | Yes | Must be provided explicitly; CMOR then derives `institution` |
 | `license` | Yes | Passed through to the output; current CMOR emits a non-fatal validation warning while loading the obs4MIPs CV |
@@ -213,7 +215,7 @@ The file is still created successfully, and the `license` global attribute is wr
 
 | Input | Required? | Verified behavior |
 | --- | --- | --- |
-| `site_id` | Conditional | Used for point-site datasets; example uses `US-ARM-SGP` |
+| `site_id` | Conditional | Used for point-site datasets; example uses `US-ARM` |
 | `site_location` | Optional but useful | Passed through to the output in the point-site case |
 
 ## Metadata obs4MIPs Derives
@@ -241,7 +243,7 @@ The most important limitation is that `institution_id` is not one of the derived
 | Example family | What changes in the output | Link |
 | --- | --- | --- |
 | Monthly gridded atmosphere field | Standard `time` + `lat` + `lon` case on a regular latitude-longitude grid | [Monthly gridded `pr`](examples-pr-mon-global-grid.md) |
-| Hourly in-situ point field | Uses `latitude1` and `longitude1`, `grid = site`, and point-site metadata such as `site_id` | [Hourly point-site `pr`](examples-pr-1hr-point-site.md) |
+| Hourly in-situ point field | Uses `latitude1` and `longitude1`, keeps `grid = site`, and carries point-site metadata such as `site_id` while using `grid_label = gn` | [Hourly point-site `pr`](examples-pr-1hr-point-site.md) |
 | Monthly zonal-mean vertical profile | Uses `time` + `height` + `lat`, `grid_label = gnz`, and the `o3zm` table entry that writes `o3` | [Monthly zonal-mean `o3zm`](examples-o3zm-zonal-mean.md) |
 
 ## Coordinate, Grid, And Vertical Notes
@@ -267,7 +269,7 @@ The point-site example uses:
 Two current-CV details matter:
 
 - `latitude1` and `longitude1` do not require bounds
-- the current CV accepts `grid_label = site`; the older demo value `US-ARM-SGP` fails validation
+- the current CV does not accept `grid_label = site` or the older demo value `ARM-SGP`; the validated point example uses `grid_label = gn`
 
 The validated point output also shows that CMOR rewrites the time axis units to `days since 2018-01-01` even though the example script passes `seconds since 2018-01-01`.
 
@@ -314,16 +316,16 @@ Even though the templates are written without literal separators, CMOR resolves 
 - path segments in the directory tree
 - underscores in the filename body
 
-With CMOR 3.14.3, this token-only `output_path_template` form produces the intended directory tree. The older slash-separated template shown in some legacy obs4MIPs demos produces doubled separators in validation runs with the current environment.
+With CMOR 3.15.0, this token-only `output_path_template` form produces the intended directory tree. The older slash-separated template shown in some legacy obs4MIPs demos produces doubled separators in validation runs with the current environment.
 
 Resolved examples from this guide:
 
 - Monthly gridded `pr`:
-  `/private/tmp/obs4mips-guide/pr-mon-global-grid/out/obs4MIPs/NOAA-NCEI/CMAP-V1902/mon/pr/gn/v20260506/pr_mon_CMAP-V1902_CMORGuide_gn_197901-197902.nc`
+  `/private/tmp/obs4mips-guide/pr-mon-global-grid/out/obs4MIPs/NOAA-NCEI/CMAP-V1902/mon/pr/gn/v20260512/pr_mon_CMAP-V1902_CMORGuide_gn_197901-197902.nc`
 - Hourly point-site `pr`:
-  `/private/tmp/obs4mips-guide/pr-1hr-point-site/out/obs4MIPs/DOE-ARM/ARMBE-atm-c1-1-8/1hr/pr/site/v20260506/pr_1hr_ARMBE-atm-c1-1-8_CMORGuide_site_201801010030-201801010130.nc`
+  `/private/tmp/obs4mips-guide/pr-1hr-point-site/out/obs4MIPs/DOE-ARM/ARMBE-atm-c1-1-8/1hr/pr/gn/v20260512/pr_1hr_ARMBE-atm-c1-1-8_CMORGuide_gn_201801010030-201801010130.nc`
 - Monthly zonal-mean `o3`:
-  `/private/tmp/obs4mips-guide/o3zm-zonal-mean/out/obs4MIPs/DLR-BIRA/BSVertOzone-v1-0/mon/o3/gnz/v20260506/o3_mon_BSVertOzone-v1-0_CMORGuide_gnz_197901-197902.nc`
+  `/private/tmp/obs4mips-guide/o3zm-zonal-mean/out/obs4MIPs/DLR-BIRA/BSVertOzone-v1-0/mon/o3/gnz/v20260512/o3_mon_BSVertOzone-v1-0_CMORGuide_gnz_197901-197902.nc`
 
 ## Example Pages
 

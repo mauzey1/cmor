@@ -40,7 +40,7 @@ This example writes `tos_tavg-u-hxy-sea`, a monthly sea-surface temperature fiel
 ## Output File
 
 ```text
-/tmp/cmor-docs/tos/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260501/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/tos/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260512/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -89,7 +89,7 @@ variables:
 		:area_label = "sea" ;
 		:branded_variable = "tos_tavg-u-hxy-sea" ;
 		:branding_suffix = "tavg-u-hxy-sea" ;
-		:creation_date = "2026-05-02T01:03:57Z" ;
+		:creation_date = "2026-05-12T23:11:30Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -98,7 +98,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-02T01:03:57Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-12T23:11:30Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -116,11 +116,11 @@ variables:
 		:table_info = "Creation Date:(2026-04-21 15:01:29) MD5:a66e0fc7ab41aafa94f1ba3223e0c9fe" ;
 		:temporal_label = "tavg" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/ee9aec12-f821-4070-b6ee-4cba71f5f257" ;
+		:tracking_id = "hdl:21.14107/25e8b826-d06e-461f-b275-fcf8b3a12164" ;
 		:variable_id = "tos" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.14.3" ;
+		:cmor_version = "3.15.0" ;
 }
 ```

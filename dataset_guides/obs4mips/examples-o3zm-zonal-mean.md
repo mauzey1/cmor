@@ -44,7 +44,7 @@ This example writes the `o3zm` table entry from `obs4MIPs_Amon.json` using a zon
 ## Output File
 
 ```text
-/private/tmp/obs4mips-guide/o3zm-zonal-mean/out/obs4MIPs/DLR-BIRA/BSVertOzone-v1-0/mon/o3/gnz/v20260506/o3_mon_BSVertOzone-v1-0_CMORGuide_gnz_197901-197902.nc
+/private/tmp/obs4mips-guide/o3zm-zonal-mean/out/obs4MIPs/DLR-BIRA/BSVertOzone-v1-0/mon/o3/gnz/v20260512/o3_mon_BSVertOzone-v1-0_CMORGuide_gnz_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -89,17 +89,17 @@ variables:
 		o3:_FillValue = 1.e+20f ;
 
 // global attributes:
-		:Conventions = "CF-1.12; ODS-2.6.1" ;
+		:Conventions = "CF-1.11; ODS-2.5" ;
 		:activity_id = "obs4MIPs" ;
 		:contact = "greg@bodekerscientific.com, submissions-obs4mips@wcrp-cmip.org" ;
-		:creation_date = "2026-05-06T19:42:52Z" ;
-		:data_specs_version = "ODS-2.6.1" ;
+		:creation_date = "2026-05-12T23:11:30Z" ;
+		:data_specs_version = "ODS-2.5" ;
 		:external_variables = "areacella" ;
 		:frequency = "mon" ;
 		:grid = "5 degree latitude height zonal mean" ;
 		:grid_label = "gnz" ;
 		:has_aux_unc = "FALSE" ;
-		:history = "2026-05-06T19:42:52Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.12; ODS-2.6.1 and CF standards." ;
+		:history = "2026-05-12T23:11:30Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.11; ODS-2.5 and CF standards." ;
 		:institution = "Deutsches Zentrum fur Luft- und Raumfahrt, Royal Belgian Institute for Space Aeronomy" ;
 		:institution_id = "DLR-BIRA" ;
 		:mip_era = "CMIP6" ;
@@ -115,14 +115,14 @@ variables:
 		:source_type = "satellite_retrieval" ;
 		:source_version_number = "v1-0" ;
 		:table_id = "obs4MIPs_Amon" ;
-		:table_info = "Creation Date:(18 November 2020) MD5:aa08a16dfef81dcf310b0fe2c4c02122" ;
+		:table_info = "Creation Date:(18 November 2020) MD5:2326922a1c50fd765f82110ed5c3675e" ;
 		:title = "Bodeker Scientific vertical ozone profile database" ;
-		:tracking_id = "cdcaaedd-b819-411b-b59b-99e9584e74a5" ;
+		:tracking_id = "7d83b752-cf04-4adc-be35-d2eda85e3acf" ;
 		:variable_id = "o3" ;
 		:variant_info = "Example subset prepared for the CMOR dataset guide" ;
 		:variant_label = "CMORGuide" ;
 		:license = "Data in this file is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses)." ;
-		:cmor_version = "3.14.3" ;
+		:cmor_version = "3.15.0" ;
 }
 ```
 

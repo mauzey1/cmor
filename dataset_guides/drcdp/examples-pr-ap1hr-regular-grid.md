@@ -35,7 +35,7 @@ This example writes `pr` from `DRCDP_AP1hr.json` using plain `time`, `latitude`,
 ## Output File
 
 ```text
-/private/tmp/drcdp-guide/pr-ap1hr-regular-grid/out/DRCDP/NAM/EPA/EDDE2-0/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/1hr/pr/v20260506/pr_NAM_EPA_EDDE2-0_CMIP6_historical_ACCESS-CM2_r1i1p1f1_1hr_200812312330-200901010030.nc
+/private/tmp/drcdp-guide/pr-ap1hr-regular-grid/out/DRCDP/NAM/EPA/EDDE2-0/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/1hr/pr/v20260512/pr_NAM_EPA_EDDE2-0_CMIP6_historical_ACCESS-CM2_r1i1p1f1_1hr_200812312330-200901010030.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -84,7 +84,7 @@ variables:
 		:Conventions = "CF-1.7 CMIP-6.5" ;
 		:activity_id = "DRCDP" ;
 		:contact = "Megan Mallard; Mallard.Megan@epa.gov" ;
-		:creation_date = "2026-05-06T19:20:25Z" ;
+		:creation_date = "2026-05-12T23:11:30Z" ;
 		:data_specs_version = "6.5.0.0; mip-cmor-tables; f42386929a0057ed15e66a3bac045b8c00d33c0f" ;
 		:driving_activity_id = "CMIP" ;
 		:driving_experiment_id = "historical" ;
@@ -95,7 +95,7 @@ variables:
 		:frequency = "1hr" ;
 		:grid = "10 x 10 km latitude x longitude" ;
 		:grid_label = "gn" ;
-		:history = "2026-05-06T19:20:25Z; CMOR rewrote data to be consistent with DRCDP, CMIP6, CMIP6Plus and CF-1.7 CMIP-6.5 standards" ;
+		:history = "2026-05-12T23:11:30Z; CMOR rewrote data to be consistent with DRCDP, CMIP6, CMIP6Plus and CF-1.7 CMIP-6.5 standards" ;
 		:institution = "United States Environmental Protection Agency, National Exposure Research Laboratory (NERL), Systems Exposure Division, 109 T.W. Alexander Drive, Durham, NC 27709, USA (ROR: 03tns0030)" ;
 		:institution_id = "EPA" ;
 		:license_id = "CC BY 4.0" ;
@@ -113,10 +113,10 @@ variables:
 		:table_id = "AP1hr" ;
 		:table_info = "Creation Date:(2025-09-03) MD5:1dcb9c887cc3909e984b64655b17e21e" ;
 		:title = "EDDE 2.0 dataset prepared for DRCDP" ;
-		:tracking_id = "hdl:21.14100/0d6240c3-0a73-41a2-8c4f-237e57a03d99" ;
+		:tracking_id = "hdl:21.14100/778e9856-1fbe-4fd9-b530-16bb78b5cf32" ;
 		:variable_id = "pr" ;
-		:license = "CC BY 4.0; DRDCP data produced by EPA is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRCDCP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.14.3" ;
+		:license = "CC BY 4.0; DRDCP data produced by EPA is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRDCP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
+		:cmor_version = "3.15.0" ;
 }
 ```
 

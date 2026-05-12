@@ -44,7 +44,7 @@ This example writes `pr` from `obs4MIPs_Amon.json` on a regular `lat`/`lon` grid
 ## Output File
 
 ```text
-/private/tmp/obs4mips-guide/pr-mon-global-grid/out/obs4MIPs/NOAA-NCEI/CMAP-V1902/mon/pr/gn/v20260506/pr_mon_CMAP-V1902_CMORGuide_gn_197901-197902.nc
+/private/tmp/obs4mips-guide/pr-mon-global-grid/out/obs4MIPs/NOAA-NCEI/CMAP-V1902/mon/pr/gn/v20260512/pr_mon_CMAP-V1902_CMORGuide_gn_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -90,17 +90,17 @@ variables:
 		pr:_FillValue = 1.e+20f ;
 
 // global attributes:
-		:Conventions = "CF-1.12; ODS-2.6.1" ;
+		:Conventions = "CF-1.11; ODS-2.5" ;
 		:activity_id = "obs4MIPs" ;
 		:contact = "pingping.Xie@noaa.gov, obs4mips-panel@wcrp-cmip.org" ;
-		:creation_date = "2026-05-06T19:42:52Z" ;
-		:data_specs_version = "ODS-2.6.1" ;
+		:creation_date = "2026-05-12T23:11:31Z" ;
+		:data_specs_version = "ODS-2.5" ;
 		:external_variables = "areacella" ;
 		:frequency = "mon" ;
 		:grid = "1x1 degree latitude x longitude" ;
 		:grid_label = "gn" ;
 		:has_aux_unc = "FALSE" ;
-		:history = "2026-05-06T19:42:52Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.12; ODS-2.6.1 and CF standards." ;
+		:history = "2026-05-12T23:11:31Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.11; ODS-2.5 and CF standards." ;
 		:institution = "NOAA National Centers for Environmental Information, Asheville, NC 28801, USA" ;
 		:institution_id = "NOAA-NCEI" ;
 		:mip_era = "CMIP6" ;
@@ -116,14 +116,14 @@ variables:
 		:source_type = "satellite_blended" ;
 		:source_version_number = "V1902" ;
 		:table_id = "obs4MIPs_Amon" ;
-		:table_info = "Creation Date:(18 November 2020) MD5:aa08a16dfef81dcf310b0fe2c4c02122" ;
+		:table_info = "Creation Date:(18 November 2020) MD5:2326922a1c50fd765f82110ed5c3675e" ;
 		:title = "CMAP V1902 precipitation prepared for obs4MIPs" ;
-		:tracking_id = "b9ebd727-268f-43c3-be6c-7e232bdffdba" ;
+		:tracking_id = "95fa32d2-e653-4fc8-b2d2-36e816185994" ;
 		:variable_id = "pr" ;
 		:variant_info = "Example subset prepared for the CMOR dataset guide" ;
 		:variant_label = "CMORGuide" ;
 		:license = "Data in this file is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses)." ;
-		:cmor_version = "3.14.3" ;
+		:cmor_version = "3.15.0" ;
 }
 ```
 

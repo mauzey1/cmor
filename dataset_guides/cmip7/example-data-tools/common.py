@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 try:
     import cmor  # noqa: E402
 except ImportError:  # pragma: no cover - fallback for local source-tree runs

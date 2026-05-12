@@ -139,9 +139,12 @@ The tables below summarize the inputs used by the examples in this guide.
 | `calendar` | Required for time-varying output | No default implied by this guide; examples use `360_day` | Time-axis metadata |
 | `frequency` | Required for time-varying output | No general default; use `fx` for fixed fields | Global attribute and DRS token |
 | `tracking_prefix` | Optional | No guide-level default; examples use `hdl:21.14107` | Prefix used when CMOR derives `tracking_id` |
+| `Conventions` | Optional | If omitted, CMOR uses the table header; CMOR 3.15.0 also preserves an explicit CV-valid value such as `CF-1.13` | Global attribute override |
 | `output_path_template` | Optional | If omitted, CMOR uses the CV directory template | Overrides the DRS directory layout |
 | `output_file_template` | Optional | If omitted, CMOR uses the CV filename template | Overrides the DRS filename layout |
 | `_history_template` | Optional | If omitted, CMOR writes its default history string | Overrides the global `history` format |
+
+CMOR 3.15.0 can also derive `drs_specs` and `tracking_prefix` from root-level CV strings. The published CMIP7 CV in this repository still uses the existing array form for `drs_specs` and does not define `tracking_prefix`, so the validated examples continue to pass both fields explicitly.
 
 ### Conditional Parent-Lineage Inputs
 
@@ -171,7 +174,7 @@ Drivers normally do not need to set these fields directly:
 - `source`
 - `realm`
 - `product`
-- `Conventions`
+- `Conventions` unless the driver supplies an explicit CV-valid override
 - `creation_date`
 - `tracking_id`
 - `variable_id`
