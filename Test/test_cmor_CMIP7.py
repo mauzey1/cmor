@@ -152,6 +152,7 @@ class TestCMIP7(unittest.TestCase):
         self.assertTrue("license_url" not in attrs)
         self.assertEqual(license, ds.getncattr("license"))
         self.assertEqual(license_id, ds.getncattr("license_id"))
+        self.assertIn("Name: CMIP7_ocean.json;", ds.getncattr("table_info"))
 
         ds.close()
 
@@ -242,7 +243,8 @@ class TestCMIP7(unittest.TestCase):
         ds.close()
 
     def test_conventions_set_by_user(self):
-        self._load_dataset(updated_fields={"Conventions": "CF-1.13"})
+        conventions = "CF-1.13"
+        self._load_dataset(updated_fields={"Conventions": conventions})
 
         data = numpy.array([27, 28])
         time = numpy.array([15, 45])
@@ -258,7 +260,9 @@ class TestCMIP7(unittest.TestCase):
         self.assertEqual(cmor.close(), 0)
 
         ds = Dataset(filename)
-        self.assertEqual("CF-1.13", ds.getncattr("Conventions"))
+        self.assertEqual(conventions, ds.getncattr("Conventions"))
+        self.assertIn(f"CMOR rewrote data to be consistent with {conventions} "
+                      "and CMIP7 data requirements.", ds.getncattr("history"))
 
         ds.close()
 
