@@ -40,7 +40,7 @@ This example writes `tos_tavg-u-hxy-sea`, a monthly sea-surface temperature fiel
 ## Output File
 
 ```text
-/tmp/cmor-docs/tos/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260512/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/tos/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260515/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -89,7 +89,7 @@ variables:
 		:area_label = "sea" ;
 		:branded_variable = "tos_tavg-u-hxy-sea" ;
 		:branding_suffix = "tavg-u-hxy-sea" ;
-		:creation_date = "2026-05-12T23:11:30Z" ;
+		:creation_date = "2026-05-15T22:39:32Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -98,7 +98,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-12T23:11:30Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -113,10 +113,10 @@ variables:
 		:region = "glb" ;
 		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
 		:source_id = "DUMMY-MODEL" ;
-		:table_info = "Creation Date:(2026-04-21 15:01:29) MD5:a66e0fc7ab41aafa94f1ba3223e0c9fe" ;
+		:table_info = "Name: CMIP7_ocean.json; Creation Date:(2026-04-21 15:01:29) MD5:a66e0fc7ab41aafa94f1ba3223e0c9fe" ;
 		:temporal_label = "tavg" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/25e8b826-d06e-461f-b275-fcf8b3a12164" ;
+		:tracking_id = "hdl:21.14107/50d2dd65-fc2d-4450-acba-7e4e9a2a45f8" ;
 		:variable_id = "tos" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This guide explains how CMOR in this repository turns CMIP7 user input into NetCDF datasets. It is written for application developers who need to decide which fields a driver must collect, which metadata CMOR derives from the CMIP7 tables and controlled vocabulary, and how coordinate or z-factor choices change the final file.
+This guide explains how CMOR in this repository turns CMIP7 user input into NetCDF datasets. It is written for application developers who need to decide which fields a driver must collect, which metadata CMOR derives from the CMIP7 tables and controlled vocabulary, and how coordinate, z-factor, or chunking choices change the final file.
 
 The worked examples are split into separate pages in this directory so each case can include:
 
@@ -33,8 +33,9 @@ The typical sequence is:
 2. Load dataset JSON.
 3. Load the CMIP7 variable table that contains the branded variable.
 4. Define the axes, grid, and z-factors required by that table entry.
-5. Write the data arrays.
-6. Close the variable and let CMOR finalize the output path, filename, and derived global metadata.
+5. Optionally set storage controls such as chunking on the CMOR variable before the first write.
+6. Write the data arrays.
+7. Close the variable and let CMOR finalize the output path, filename, and derived global metadata.
 
 Pseudocode for a driver looks like:
 
@@ -43,6 +44,7 @@ collect dataset JSON
 select CV + coordinate table + variable table
 select branded variable entry
 define required axes / grid / z-factors
+optionally set variable chunking
 write data arrays
 close output and record the CMOR-generated path
 ```
@@ -58,6 +60,8 @@ The dataset JSON is where the driver declares dataset identity, output location,
 - dataset identity such as `activity_id`, `experiment_id`, `institution_id`, and `source_id`
 - the RIPF components used to build `variant_label`
 - `drs_specs`, `grid_label`, `region`, `frequency`, and `outpath`
+
+Runtime storage controls such as chunking are not dataset-JSON fields in these examples. When a driver needs a non-default chunk layout, it sets that on the CMOR variable after `cmor.variable(...)` and before the first `cmor.write(...)`.
 
 ### Controlled Vocabulary
 
@@ -207,6 +211,7 @@ The linked examples below show the main dataset shapes covered by this guide.
 | Near-surface scalar height | Uses a singleton vertical coordinate written as a scalar `height` variable | [Scalar-height `tas`](examples-tas-height2m.md) |
 | Pressure-level atmosphere field | Uses `plev19` and writes a length-19 pressure coordinate | [Pressure-level `ta`](examples-ta-plev19.md) |
 | Hybrid-sigma atmosphere field | Adds z-factors and formula terms alongside the main variable | [Hybrid-sigma `hus`](examples-hus-hybrid-sigma.md) |
+| Custom chunking on streamed writes | Uses `cmor.set_chunking` before writing 40 monthly slices on a `144 x 192` grid with a repack-compatible data chunk | [Custom-chunked `pr`](examples-pr-custom-chunking.md) |
 
 ## Coordinate and Grid Patterns
 
@@ -246,6 +251,25 @@ For `standard_hybrid_sigma`, the output depends on:
 ### Other Grid Families
 
 The CMIP7 tables in this repository also define rotated, projected, and unstructured horizontal grids. Those follow the same high-level pattern: the driver must define the grid and any auxiliary coordinates before writing the main variable. This example set focuses on native latitude-longitude output plus vertical-coordinate variation.
+
+### Chunking And Streaming Writes
+
+Chunking is controlled at runtime on the CMOR variable, not in the dataset JSON.
+
+The supported Python pattern is:
+
+- create the variable with `cmor.variable(...)`
+- call `cmor.set_chunking(var_id, [...])` before the first write
+- write the data, including one-timestep-at-a-time streaming writes if needed
+
+For CMIP7-style files, the practical chunking constraints are:
+
+- time coordinate variables such as `time` and `time_bnds` should remain a single chunk or contiguous, which CMOR manages in these examples
+- if a data variable has multiple chunks, target at least about `4 MiB` uncompressed per chunk
+- the size rule is evaluated on the data variable chunk itself; consolidated internal metadata is a separate file-layout concern outside CMOR's chunking API
+- use `ncdump -sh` when you need to show `_Storage` and `_ChunkSizes` in the generated file
+
+The chunking example in this guide shows a custom data-variable layout of `[38, 144, 192]` for a `(time, lat, lon)` precipitation field on a `144 x 192` grid. In the verified output, the `pr` variable uses that requested chunking while `time` and `time_bnds` keep CMOR-managed coordinate chunking.
 
 ## Output Naming Rules
 
@@ -288,10 +312,11 @@ That means:
 - Keep dataset JSON focused on dataset identity, output location, and explicit overrides.
 - Use branded CMIP7 variable names from the tables rather than rebuilding CMIP7 labels manually.
 - Set the CMIP7 file selections explicitly: `_controlled_vocabulary_file`, `_AXIS_ENTRY_FILE`, and `_FORMULA_VAR_FILE`.
-- Use CV-valid identifiers for `institution_id`, `source_id`, `grid_label`, `license_id`, and `tracking_prefix`.
+- Use CV-valid identifiers for `institution_id`, `source_id`, `grid_label`, and `license_id`, and pass a valid `tracking_prefix` when CMOR must derive `tracking_id`.
 - Supply `frequency` for time-varying variables, and use `fx` when a fixed-field DRS is intended.
 - Let the controlled vocabulary expand `institution`, `source`, `experiment`, and `license`.
 - Read the coordinate entry carefully for hybrid or specialized vertical coordinates and create every required formula-term variable.
+- Treat chunking as a runtime write option. If a driver needs a non-default layout, call `cmor.set_chunking` on the variable before the first `cmor.write`.
 - Treat the final NetCDF path and filename as CMOR output, not driver-formatted strings.
 
 ## Summary

@@ -41,7 +41,7 @@ This example writes `hus_tavg-al-hxy-u`, a monthly model-level specific-humidity
 ## Output File
 
 ```text
-/tmp/cmor-docs/hus-hybrid/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/hus/tavg-al-hxy-u/g999/v20260512/hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/hus-hybrid/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/hus/tavg-al-hxy-u/g999/v20260515/hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -121,7 +121,7 @@ variables:
 		:area_label = "u" ;
 		:branded_variable = "hus_tavg-al-hxy-u" ;
 		:branding_suffix = "tavg-al-hxy-u" ;
-		:creation_date = "2026-05-12T23:11:31Z" ;
+		:creation_date = "2026-05-15T22:39:32Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -130,7 +130,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-12T23:11:31Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -145,7 +145,7 @@ variables:
 		:region = "glb" ;
 		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
 		:source_id = "DUMMY-MODEL" ;
-		:table_info = "Creation Date:(2026-04-21 15:01:29) MD5:6c425d5354e32ec5498084c927c982a9" ;
+		:table_info = "Name: CMIP7_atmos.json; Creation Date:(2026-04-21 15:01:29) MD5:6c425d5354e32ec5498084c927c982a9" ;
 		:temporal_label = "tavg" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
 		:variable_id = "hus" ;
@@ -153,6 +153,6 @@ variables:
 		:vertical_label = "al" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
 		:cmor_version = "3.15.0" ;
-		:tracking_id = "hdl:21.14107/57af2a3f-88f6-49af-bed5-50a94bf67e38" ;
+		:tracking_id = "hdl:21.14107/74e58f60-8b37-48d1-9121-2b7ebaed457e" ;
 }
 ```

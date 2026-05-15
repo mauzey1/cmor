@@ -49,7 +49,7 @@ This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and incl
 ## Output File
 
 ```text
-/tmp/cmor-docs/tos-parent/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/piControl/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260512/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_piControl_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/tos-parent/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/piControl/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260515/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_piControl_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -100,7 +100,7 @@ variables:
 		:branch_time_in_parent = 10800. ;
 		:branded_variable = "tos_tavg-u-hxy-sea" ;
 		:branding_suffix = "tavg-u-hxy-sea" ;
-		:creation_date = "2026-05-12T23:11:30Z" ;
+		:creation_date = "2026-05-15T22:39:32Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Pre-industrial control simulation with prescribed carbon dioxide concentrations (for prescribed carbon dioxide emissions, see `esm-piControl`). Used to characterise natural variability and unforced behaviour." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -109,7 +109,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-12T23:11:30Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -130,10 +130,10 @@ variables:
 		:region = "glb" ;
 		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
 		:source_id = "DUMMY-MODEL" ;
-		:table_info = "Creation Date:(2026-04-21 15:01:29) MD5:a66e0fc7ab41aafa94f1ba3223e0c9fe" ;
+		:table_info = "Name: CMIP7_ocean.json; Creation Date:(2026-04-21 15:01:29) MD5:a66e0fc7ab41aafa94f1ba3223e0c9fe" ;
 		:temporal_label = "tavg" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/a5d1806b-8aed-4bc7-b02f-db79a51d7f15" ;
+		:tracking_id = "hdl:21.14107/5abc2ab3-d08f-442a-a435-b03cb9a2db63" ;
 		:variable_id = "tos" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;

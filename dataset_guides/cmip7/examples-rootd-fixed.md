@@ -40,7 +40,7 @@ This example writes `rootd_ti-u-hxy-lnd`, a time-independent land field. It show
 ## Output File
 
 ```text
-/tmp/cmor-docs/rootd/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/v20260512/rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
+/tmp/cmor-docs/rootd/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/v20260515/rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -80,7 +80,7 @@ variables:
 		:area_label = "lnd" ;
 		:branded_variable = "rootd_ti-u-hxy-lnd" ;
 		:branding_suffix = "ti-u-hxy-lnd" ;
-		:creation_date = "2026-05-12T23:11:31Z" ;
+		:creation_date = "2026-05-15T22:39:32Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -89,7 +89,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "fx" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-12T23:11:31Z ; CMOR rewrote data to be consistent with CMIP7, CF-1.12 and CF standards." ;
+		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -104,10 +104,10 @@ variables:
 		:region = "glb" ;
 		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
 		:source_id = "DUMMY-MODEL" ;
-		:table_info = "Creation Date:(2026-04-21 15:01:29) MD5:bafb8e42cac0efce87531baf8e7d21b2" ;
+		:table_info = "Name: CMIP7_land.json; Creation Date:(2026-04-21 15:01:29) MD5:bafb8e42cac0efce87531baf8e7d21b2" ;
 		:temporal_label = "ti" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/b364a5a6-32fb-4170-a5d5-e4e7de4ca850" ;
+		:tracking_id = "hdl:21.14107/712ceb56-d182-4004-8da6-dd8dc62f8bc4" ;
 		:variable_id = "rootd" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
