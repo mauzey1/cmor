@@ -1,5 +1,7 @@
 # Example: Monthly Ocean Field With Parent Metadata
 
+## What This Example Demonstrates
+
 This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and includes the parent-lineage attributes required by the current CMIP7 controlled vocabulary. It shows the simplest parented case in this guide: the same native latitude-longitude monthly ocean field as the basic `tos` example, but with `branch_*` and `parent_*` metadata present in both the dataset JSON and the output file.
 
 ## Dataset JSON Used
@@ -14,7 +16,6 @@ This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and incl
   "branch_time_in_child": 30.0,
   "branch_time_in_parent": 10800.0,
   "calendar": "360_day",
-  "drs_specs": "MIP-DRS7",
   "experiment_id": "piControl",
   "forcing_index": "f3",
   "frequency": "mon",
@@ -22,7 +23,6 @@ This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and incl
   "initialization_index": "i1",
   "institution_id": "MOHC",
   "license_id": "CC-BY-4.0",
-  "mip_era": "CMIP7",
   "nominal_resolution": "100 km",
   "outpath": "/tmp/cmor-docs/tos-parent/out",
   "parent_activity_id": "CMIP",
@@ -34,8 +34,7 @@ This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and incl
   "physics_index": "p1",
   "realization_index": "r9",
   "region": "glb",
-  "source_id": "DUMMY-MODEL",
-  "tracking_prefix": "hdl:21.14107"
+  "source_id": "DUMMY-MODEL"
 }
 ```
 
@@ -44,12 +43,13 @@ This example writes `tos_tavg-u-hxy-sea` for the `piControl` experiment and incl
 - Table: `CMIP7_ocean.json`
 - Variable entry: `tos_tavg-u-hxy-sea`
 - Axes: `time`, `latitude`, `longitude`
+- Root-string CV note: the published `_controlled_vocabulary_file` supplies root-level `drs_specs = "MIP-DRS7"`, `tracking_prefix = "hdl:21.14107"`, and `mip_era = "CMIP7"`, so CMOR derives them instead of reading them from dataset JSON
 - Parent chain required by the current CV: `piControl -> piControl-spinup`
 
-## Output File
+## Resolved Output File
 
 ```text
-/tmp/cmor-docs/tos-parent/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/piControl/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260515/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_piControl_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/tos-parent/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/piControl/r9i1p1f3/glb/mon/tos/tavg-u-hxy-sea/g999/v20260520/tos_tavg-u-hxy-sea_mon_glb_g999_DUMMY-MODEL_piControl_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -100,7 +100,7 @@ variables:
 		:branch_time_in_parent = 10800. ;
 		:branded_variable = "tos_tavg-u-hxy-sea" ;
 		:branding_suffix = "tavg-u-hxy-sea" ;
-		:creation_date = "2026-05-15T22:39:32Z" ;
+		:creation_date = "2026-05-20T18:58:15Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Pre-industrial control simulation with prescribed carbon dioxide concentrations (for prescribed carbon dioxide emissions, see `esm-piControl`). Used to characterise natural variability and unforced behaviour." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -109,7 +109,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
+		:history = "2026-05-20T18:58:15Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -133,11 +133,11 @@ variables:
 		:table_info = "Name: CMIP7_ocean.json; Creation Date:(2026-04-21 15:01:29) MD5:a66e0fc7ab41aafa94f1ba3223e0c9fe" ;
 		:temporal_label = "tavg" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/5abc2ab3-d08f-442a-a435-b03cb9a2db63" ;
+		:tracking_id = "hdl:21.14107/62548f74-03c2-49dd-bc7e-20dbf5098bb6" ;
 		:variable_id = "tos" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```

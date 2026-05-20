@@ -1,5 +1,7 @@
 # Example: Monthly Precipitation With Custom Chunking
 
+## What This Example Demonstrates
+
 This example writes `pr_tavg-u-hxy-u`, a monthly precipitation field on a native latitude-longitude grid, while overriding the data-variable chunk layout. It shows the supported CMIP7 pattern for chunking: create the CMOR variable, call `cmor.set_chunking(...)`, then stream the data one timestep at a time. The chunking choice is not part of the dataset JSON, so the chunk metadata is shown below with `ncdump -sh`.
 
 The chunk shape in this example is chosen so the data-variable chunking itself is compatible with the size rule used by `cmip7_repack`'s `check_cmip7_packing` tool. In practice, that means keeping `time` and `time_bnds` to a single chunk or contiguous storage, and making each multi-chunk data-variable chunk at least about `4 MiB` uncompressed. A raw CMOR file may still fail that tool's separate consolidated-metadata check, which is outside the chunking controls demonstrated here.
@@ -14,7 +16,6 @@ The chunk shape in this example is chosen so the data-variable chunking itself i
   "_controlled_vocabulary_file": "cmip7-cmor-tables/tables-cvs/cmor-cvs.json",
   "activity_id": "CMIP",
   "calendar": "360_day",
-  "drs_specs": "MIP-DRS7",
   "experiment_id": "amip",
   "forcing_index": "f3",
   "frequency": "mon",
@@ -22,14 +23,12 @@ The chunk shape in this example is chosen so the data-variable chunking itself i
   "initialization_index": "i1",
   "institution_id": "MOHC",
   "license_id": "CC-BY-4.0",
-  "mip_era": "CMIP7",
   "nominal_resolution": "100 km",
   "outpath": "/tmp/cmor-docs/pr-chunking/out",
   "physics_index": "p1",
   "realization_index": "r9",
   "region": "glb",
-  "source_id": "DUMMY-MODEL",
-  "tracking_prefix": "hdl:21.14107"
+  "source_id": "DUMMY-MODEL"
 }
 ```
 
@@ -38,14 +37,15 @@ The chunk shape in this example is chosen so the data-variable chunking itself i
 - Table: `CMIP7_atmos.json`
 - Variable entry: `pr_tavg-u-hxy-u`
 - Axes: `time`, `latitude`, `longitude`
+- Root-string CV note: the published `_controlled_vocabulary_file` supplies root-level `drs_specs = "MIP-DRS7"`, `tracking_prefix = "hdl:21.14107"`, and `mip_era = "CMIP7"`, so CMOR derives them instead of reading them from dataset JSON
 - Horizontal grid: `144 x 192`
 - Runtime chunking call: `cmor.set_chunking(var_id, [38, 144, 192])`
 - Write pattern: 40 monthly slices written one timestep at a time with `time_vals` and `time_bnds`
 
-## Output File
+## Resolved Output File
 
 ```text
-/tmp/cmor-docs/pr-chunking/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/pr/tavg-u-hxy-u/g999/v20260515/pr_tavg-u-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-198204.nc
+/tmp/cmor-docs/pr-chunking/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/pr/tavg-u-hxy-u/g999/v20260520/pr_tavg-u-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-198204.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -94,7 +94,7 @@ variables:
 		:area_label = "u" ;
 		:branded_variable = "pr_tavg-u-hxy-u" ;
 		:branding_suffix = "tavg-u-hxy-u" ;
-		:creation_date = "2026-05-15T22:56:45Z" ;
+		:creation_date = "2026-05-20T18:58:19Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -103,7 +103,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-15T22:56:45Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
+		:history = "2026-05-20T18:58:19Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -125,8 +125,8 @@ variables:
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
-		:tracking_id = "hdl:21.14107/d8193aed-81f7-4ac4-902e-c5536bb6c639" ;
+		:cmor_version = "3.15.1" ;
+		:tracking_id = "hdl:21.14107/9eeef70d-4eb2-48b3-a9a1-dd548491660b" ;
 }
 ```
 
@@ -199,7 +199,7 @@ variables:
 		:area_label = "u" ;
 		:branded_variable = "pr_tavg-u-hxy-u" ;
 		:branding_suffix = "tavg-u-hxy-u" ;
-		:creation_date = "2026-05-15T22:56:45Z" ;
+		:creation_date = "2026-05-20T18:58:19Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -208,7 +208,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-15T22:56:45Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
+		:history = "2026-05-20T18:58:19Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -230,8 +230,8 @@ variables:
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
-		:tracking_id = "hdl:21.14107/d8193aed-81f7-4ac4-902e-c5536bb6c639" ;
+		:cmor_version = "3.15.1" ;
+		:tracking_id = "hdl:21.14107/9eeef70d-4eb2-48b3-a9a1-dd548491660b" ;
 		:_NCProperties = "version=2,netcdf=4.10.0,hdf5=2.1.0" ;
 		:_SuperblockVersion = 2 ;
 		:_IsNetcdf4 = 1 ;

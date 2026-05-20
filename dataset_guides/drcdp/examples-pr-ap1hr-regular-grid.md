@@ -1,5 +1,7 @@
 # Example: Hourly Precipitation On A Rectilinear Latitude-Longitude Grid
 
+## What This Example Demonstrates
+
 This example writes `pr` from `DRCDP_AP1hr.json` using plain `time`, `latitude`, and `longitude` axes. It demonstrates the smallest validated DRCDP workflow and shows that `frequency = 1hr` comes from the table entry rather than from the driver JSON.
 
 ## Dataset JSON Used
@@ -32,7 +34,7 @@ This example writes `pr` from `DRCDP_AP1hr.json` using plain `time`, `latitude`,
 - Frequency: derived by CMOR from the `AP1hr` table entry
 - Source-driven metadata: the `EDDE2-0` CV entry supplies `institution_id = EPA`, `region_id = NAM`, `grid = 10 x 10 km latitude x longitude`, and the license fields
 
-## Output File
+## Resolved Output File
 
 ```text
 /private/tmp/drcdp-guide/pr-ap1hr-regular-grid/out/DRCDP/NAM/EPA/EDDE2-0/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/1hr/pr/v20260512/pr_NAM_EPA_EDDE2-0_CMIP6_historical_ACCESS-CM2_r1i1p1f1_1hr_200812312330-200901010030.nc
@@ -116,7 +118,6 @@ variables:
 		:tracking_id = "hdl:21.14100/778e9856-1fbe-4fd9-b530-16bb78b5cf32" ;
 		:variable_id = "pr" ;
 		:license = "CC BY 4.0; DRDCP data produced by EPA is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRDCP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```
-

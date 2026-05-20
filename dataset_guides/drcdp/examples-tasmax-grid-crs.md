@@ -1,5 +1,7 @@
 # Example: Daily Tasmax With Grid And CRS Metadata
 
+## What This Example Demonstrates
+
 This example writes `tasmax` from `DRCDP_APday.json` using the separate grids workflow. It subsets the shipped `DataPreparationExamples/DEMO/MACA3-0/DRCDP-MACA3-0_demo_data.nc` file, loads `DRCDP_grids.json`, creates a grid with 2-D auxiliary latitude-longitude coordinates plus 4-corner vertices, and writes a `crs` variable with the WGS84 metadata copied from the demo file.
 
 ## Dataset JSON Used
@@ -34,7 +36,7 @@ This example writes `tasmax` from `DRCDP_APday.json` using the separate grids wo
 - CRS: `grid_mapping_name = latitude_longitude` with `semi_major_axis`, `inverse_flattening`, and `crs_wkt` copied from the demo file
 - Longitude normalization: the example converts longitudes to `[0, 360]` because `DRCDP_grids.json` validates `longitude` and `vertices_longitude` against that range
 
-## Output File
+## Resolved Output File
 
 ```text
 /private/tmp/drcdp-guide/tasmax-grid-crs/out/DRCDP/NAM/UCM-ACSL/MACA3-0/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260512/tasmax_NAM_UCM-ACSL_MACA3-0_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20090101-20090102.nc
@@ -157,7 +159,6 @@ variables:
 		:tracking_id = "hdl:21.14100/991e1830-4c4a-464e-9bb4-3d11bf28681c" ;
 		:variable_id = "tasmax" ;
 		:license = "CC0 1.0; DRDCP data produced by UCM-ACSL is licensed under a Creative Commons CC0 1.0 Universal Public Domain Dedication License (https://creativecommons.org/publicdomain/zero/1.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRDCP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```
-

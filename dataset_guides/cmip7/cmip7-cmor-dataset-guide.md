@@ -16,6 +16,8 @@ All examples in this guide use the published CMIP7 controlled vocabulary file:
 cmip7-cmor-tables/tables-cvs/cmor-cvs.json
 ```
 
+The updated published CMIP7 CV now exposes `mip_era = "CMIP7"`, `drs_specs = "MIP-DRS7"`, and `tracking_prefix = "hdl:21.14107"` as root-level strings. As a result, all validated CMIP7 examples in this guide point directly at that published CV and demonstrate CMOR 3.15.1 deriving `drs_specs`, `tracking_id`, and `mip_era` from the CV instead of from user input.
+
 Run-specific fields such as `creation_date`, `tracking_id`, and the `vYYYYMMDD` version token vary between runs. The structural behavior shown by the examples does not.
 
 ## CMORization Workflow
@@ -59,9 +61,12 @@ The dataset JSON is where the driver declares dataset identity, output location,
 - file selections such as `_controlled_vocabulary_file`, `_AXIS_ENTRY_FILE`, and `_FORMULA_VAR_FILE`
 - dataset identity such as `activity_id`, `experiment_id`, `institution_id`, and `source_id`
 - the RIPF components used to build `variant_label`
-- `drs_specs`, `grid_label`, `region`, `frequency`, and `outpath`
+- `grid_label`, `region`, `frequency`, and `outpath`
+- optional pass-through metadata such as `archive_id`, `host_collection`, or `cv_version` when a project wants them preserved in the output
 
 Runtime storage controls such as chunking are not dataset-JSON fields in these examples. When a driver needs a non-default chunk layout, it sets that on the CMOR variable after `cmor.variable(...)` and before the first `cmor.write(...)`.
+
+With CMOR 3.15.1, the published CMIP7 CV used by these examples contributes root-level `mip_era = CMIP7`, `drs_specs = MIP-DRS7`, and `tracking_prefix = hdl:21.14107`, so the example JSON files in this guide no longer pass any of those fields explicitly.
 
 ### Controlled Vocabulary
 
@@ -69,6 +74,7 @@ The CMIP7 controlled vocabulary does three main jobs:
 
 - validates controlled values such as `activity_id`, `experiment_id`, `grid_label`, `institution_id`, `license_id`, and the RIPF indices
 - expands identifiers into descriptive metadata such as `institution`, `source`, `experiment`, `description`, and `license`
+- provides root-level string metadata such as `mip_era` and `data_specs_version`
 - provides the DRS directory and filename templates used to build the final output path
 
 The published CMIP7 CV in this repository uses:
@@ -103,6 +109,16 @@ For example, the branded variable name `tos_tavg-u-hxy-sea` is split by CMOR int
 
 That is why a driver normally supplies the branded table entry once rather than rebuilding those labels by hand.
 
+### Coordinate, Grid, And Formula Tables
+
+The CMIP7 coordinate and formula-term files determine which runtime objects a driver must create around the main variable:
+
+- `CMIP7_coordinate.json` defines axis metadata such as units, bounds requirements, and entries like `height2m` or `plev19`
+- `CMIP7_formula_terms.json` defines the z-factor variables and formula-term metadata needed by hybrid-coordinate outputs
+- grid-aware cases still depend on runtime driver choices for auxiliary coordinates and, when relevant, CRS metadata before the main variable is written
+
+These files do not usually add new dataset-identity fields, but they do control whether a driver must create scalar coordinates, pressure axes, hybrid z-factors, or a separate grid definition.
+
 ## User Input Reference
 
 The tables below summarize the inputs used by the examples in this guide.
@@ -128,13 +144,21 @@ The tables below summarize the inputs used by the examples in this guide.
 | `initialization_index` | Yes | No default | Builds `variant_label` |
 | `physics_index` | Yes | No default | Builds `variant_label` |
 | `forcing_index` | Yes | No default | Builds `variant_label` |
-| `drs_specs` | Yes | No default; examples use `MIP-DRS7` | Global attribute and DRS token |
-| `mip_era` | Yes in this example set | Examples use `CMIP7` | Global attribute and DRS token |
+| `drs_specs` | Optional in CMOR 3.15.1 | The validated examples omit it from dataset JSON and let the published CMIP7 CV supply `MIP-DRS7` | Global attribute and DRS token |
+| `mip_era` | Optional in CMOR 3.15.1 | If omitted, the published CMIP7 CV supplies `CMIP7` from its root-level string entry | Global attribute and DRS token |
 | `grid_label` | Yes | No default; must be CV-valid | Global attribute and DRS token |
 | `nominal_resolution` | Yes | No default; must be CV-valid | Global attribute |
 | `region` | Yes | No default; examples use `glb` | Global attribute and DRS token |
 | `license_id` | Yes | No default; must be CV-valid | Used to derive `license` |
 | `outpath` | Yes | No default | Filesystem root where CMOR creates the DRS tree |
+
+### Common Optional Pass-Through Inputs
+
+| Input | Required? | Default or expected value | Use in output |
+| --- | --- | --- | --- |
+| `archive_id` | Optional | Current CMIP7 unit tests use `WCRP` | Preserved as a global attribute when supplied |
+| `host_collection` | Optional | Current CMIP7 unit tests use `CMIP7` | Preserved as a global attribute when supplied |
+| `cv_version` | Optional | No guide-level default | Preserved as a global attribute when supplied |
 
 ### Time, Tracking, and Override Inputs
 
@@ -142,13 +166,15 @@ The tables below summarize the inputs used by the examples in this guide.
 | --- | --- | --- | --- |
 | `calendar` | Required for time-varying output | No default implied by this guide; examples use `360_day` | Time-axis metadata |
 | `frequency` | Required for time-varying output | No general default; use `fx` for fixed fields | Global attribute and DRS token |
-| `tracking_prefix` | Optional | No guide-level default; examples use `hdl:21.14107` | Prefix used when CMOR derives `tracking_id` |
-| `Conventions` | Optional | If omitted, CMOR uses the table header; CMOR 3.15.0 also preserves an explicit CV-valid value such as `CF-1.13` | Global attribute override |
+| `tracking_prefix` | Optional | The validated examples omit it from dataset JSON and let the published CMIP7 CV supply `hdl:21.14107` | Prefix used when CMOR derives `tracking_id` |
+| `Conventions` | Optional | If omitted, CMOR uses the table header; CMOR 3.15.1 also preserves an explicit CV-valid value such as `CF-1.13` | Global attribute override |
 | `output_path_template` | Optional | If omitted, CMOR uses the CV directory template | Overrides the DRS directory layout |
 | `output_file_template` | Optional | If omitted, CMOR uses the CV filename template | Overrides the DRS filename layout |
 | `_history_template` | Optional | If omitted, CMOR writes its default history string | Overrides the global `history` format |
 
-CMOR 3.15.0 can also derive `drs_specs` and `tracking_prefix` from root-level CV strings. The published CMIP7 CV in this repository still uses the existing array form for `drs_specs` and does not define `tracking_prefix`, so the validated examples continue to pass both fields explicitly.
+CMOR 3.15.1 derives `mip_era`, `drs_specs`, and `tracking_prefix` from the published CMIP7 CV root strings used by these examples, so all three fields can be omitted from dataset JSON when that CV is selected.
+
+When a driver supplies `Conventions`, CMOR 3.15.1 uses that explicit value both for the global `Conventions` attribute and in the default `history` message.
 
 ### Conditional Parent-Lineage Inputs
 
@@ -178,6 +204,7 @@ Drivers normally do not need to set these fields directly:
 - `source`
 - `realm`
 - `product`
+- `mip_era` when the root-level CMIP7 CV provides it, as in the published `cmor-cvs.json`
 - `Conventions` unless the driver supplies an explicit CV-valid override
 - `creation_date`
 - `tracking_id`
@@ -206,6 +233,7 @@ The linked examples below show the main dataset shapes covered by this guide.
 | --- | --- | --- |
 | Monthly native-grid ocean field | Standard `time` + `lat` + `lon` case on a native grid | [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md) |
 | Monthly ocean field with parent metadata | Adds the required `branch_*` and `parent_*` lineage attributes | [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) |
+| Monthly Diurnal climatology with explicit `Conventions` override | Uses `time3`, writes `climatology_bnds`, keeps `frequency = 1hr`, and preserves `Conventions = CF-1.13` in both the global attribute and default `history` string | [Monthly Diurnal `rlut`](examples-rlut-monthly-diurnal.md) |
 | Monthly ice-sheet rainfall flux | Shows a branded variable whose `area_label` and `realm` are not the simplest single-realm case | [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md) |
 | Fixed land field | Omits the time axis and uses `frequency = fx` | [Fixed `rootd`](examples-rootd-fixed.md) |
 | Near-surface scalar height | Uses a singleton vertical coordinate written as a scalar `height` variable | [Scalar-height `tas`](examples-tas-height2m.md) |
@@ -230,6 +258,19 @@ These become `lat`, `lon`, and `time` variables in the output.
 Some CMIP7 entries use a scalar vertical coordinate rather than a length-N dimension. Examples include `height2m` and `h100m`.
 
 The `tas_tavg-h2m-hxy-u` example shows that CMOR writes a scalar `height` coordinate and attaches it through the variable `coordinates` attribute.
+
+### Climatology Time Axes
+
+CMOR 3.15.1 also supports CMIP7 climatology variables that use the `time3` coordinate entry for Monthly Diurnal output.
+
+In that pattern:
+
+- the driver supplies climatology bounds on `time3`
+- CMOR writes the output time variable as `time`
+- the output time variable carries `climatology = "climatology_bnds"`
+- the output time variable keeps `long_name = "Diurnal Mean"`
+- the output reports `frequency = 1hr`
+- the resolved filename uses a monthly `YYYYMM-YYYYMM` time-range suffix without an extra climatology marker
 
 ### Pressure Levels
 
@@ -292,6 +333,8 @@ MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g99
 rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
 ```
 
+For CMIP7 Monthly Diurnal variables on `time3`, CMOR 3.15.1 formats the time range with the same monthly `YYYYMM-YYYYMM` suffix style used by other climatology outputs. The climatology semantics are carried by the `time:climatology` attribute, `long_name = "Diurnal Mean"`, and the branded variable's `tclmdc` temporal label rather than by an extra filename suffix.
+
 ## Parent Metadata
 
 Parent metadata is conditional. It depends on the experiment entry selected in the controlled vocabulary.
@@ -307,16 +350,32 @@ That means:
 - a dataset whose experiment entry names a parent must include the required lineage metadata
 - [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) shows the minimal monthly case with those attributes populated
 
+## Example Pages
+
+Runnable scripts for these cases live under `example-data-tools/`.
+
+- [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md)
+- [Parented `piControl` `tos`](examples-tos-parent-picontrol.md)
+- [Monthly Diurnal `rlut`](examples-rlut-monthly-diurnal.md)
+- [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md)
+- [Fixed `rootd`](examples-rootd-fixed.md)
+- [Scalar-height `tas`](examples-tas-height2m.md)
+- [Pressure-level `ta`](examples-ta-plev19.md)
+- [Hybrid-sigma `hus`](examples-hus-hybrid-sigma.md)
+- [Custom-chunked `pr`](examples-pr-custom-chunking.md)
+
 ## Practical Rules for Driver Authors
 
 - Keep dataset JSON focused on dataset identity, output location, and explicit overrides.
 - Use branded CMIP7 variable names from the tables rather than rebuilding CMIP7 labels manually.
 - Set the CMIP7 file selections explicitly: `_controlled_vocabulary_file`, `_AXIS_ENTRY_FILE`, and `_FORMULA_VAR_FILE`.
-- Use CV-valid identifiers for `institution_id`, `source_id`, `grid_label`, and `license_id`, and pass a valid `tracking_prefix` when CMOR must derive `tracking_id`.
+- Use CV-valid identifiers for `institution_id`, `source_id`, `grid_label`, and `license_id`.
+- Because the published CMIP7 CV in this repository now exposes `mip_era`, `drs_specs`, and `tracking_prefix` as root-level strings, drivers can omit those inputs and let CMOR derive them from the CV. All validated examples in this guide now use that path.
 - Supply `frequency` for time-varying variables, and use `fx` when a fixed-field DRS is intended.
-- Let the controlled vocabulary expand `institution`, `source`, `experiment`, and `license`.
+- Let the controlled vocabulary expand `institution`, `source`, `experiment`, `license`, and the root-level `mip_era` when the CV provides it.
 - Read the coordinate entry carefully for hybrid or specialized vertical coordinates and create every required formula-term variable.
 - Treat chunking as a runtime write option. If a driver needs a non-default layout, call `cmor.set_chunking` on the variable before the first `cmor.write`.
+- If a driver overrides `Conventions`, expect the same value to appear in both the global `Conventions` attribute and the default CMOR `history` string.
 - Treat the final NetCDF path and filename as CMOR output, not driver-formatted strings.
 
 ## Summary

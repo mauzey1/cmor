@@ -100,7 +100,9 @@ The current published `source_id` values in the CV are:
 - `MACA3-0`
 - `STAR-ESDM1-0`
 
-### Variable And Grid Tables
+### Coordinate, Variable, And Grid Tables
+
+`DRCDP_coordinate.json` defines the standard `time`, `latitude`, `longitude`, and scalar-height coordinate entries used by the validated examples.
 
 The variable tables provide the per-variable structure:
 
@@ -118,6 +120,8 @@ The variable tables provide the per-variable structure:
 - auxiliary 2-D `latitude` and `longitude`
 - `vertices_latitude` and `vertices_longitude`
 - the `crs` variable schema used by `cmor.set_crs`
+
+`DRCDP_formula_terms.json` is also injected by the helper workflow, but the currently published `AP1hr` and `APday` variables exercised here do not require any z-factors.
 
 ### CMOR-Derived Fields
 
@@ -272,6 +276,8 @@ Examples from this guide:
   `/private/tmp/drcdp-guide/tasmax-height2m/out/DRCDP/NAM/UCSD-SIO/LOCA2-1/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260512/tasmax_NAM_UCSD-SIO_LOCA2-1_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20081231-20090101.nc`
 
 ## Example Pages
+
+Runnable scripts for these cases live under `example-data-tools/`.
 
 - [Hourly `pr` on rectilinear `lat`/`lon`](examples-pr-ap1hr-regular-grid.md)
 - [Daily `tasmax` with implicit `height2m`](examples-tasmax-height2m.md)

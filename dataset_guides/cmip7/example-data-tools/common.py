@@ -29,10 +29,8 @@ BASE_USER_INPUT = {
     "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
     "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json",
     "_cmip7_option": 1,
-    "_controlled_vocabulary_file": CV_PATH_REL,
     "activity_id": "CMIP",
     "calendar": "360_day",
-    "drs_specs": "MIP-DRS7",
     "experiment_id": "amip",
     "forcing_index": "f3",
     "frequency": "mon",
@@ -40,13 +38,11 @@ BASE_USER_INPUT = {
     "initialization_index": "i1",
     "institution_id": "MOHC",
     "license_id": "CC-BY-4.0",
-    "mip_era": "CMIP7",
     "nominal_resolution": "100 km",
     "physics_index": "p1",
     "realization_index": "r9",
     "region": "glb",
     "source_id": "DUMMY-MODEL",
-    "tracking_prefix": "hdl:21.14107",
 }
 
 
@@ -61,13 +57,21 @@ def cmor_version() -> str:
     )
 
 
-def configure_dataset(workdir: Path, overrides: dict | None = None) -> Path:
+def configure_dataset(
+    workdir: Path,
+    overrides: dict | None = None,
+    removed_keys: list[str] | None = None,
+) -> Path:
     workdir.mkdir(parents=True, exist_ok=True)
     outdir = workdir / "out"
     outdir.mkdir(parents=True, exist_ok=True)
 
     user_input = dict(BASE_USER_INPUT)
+    user_input["_controlled_vocabulary_file"] = CV_PATH_REL
     user_input["outpath"] = str(outdir)
+    if removed_keys:
+        for key in removed_keys:
+            user_input.pop(key, None)
     if overrides:
         user_input.update(overrides)
 
@@ -115,6 +119,35 @@ def time_axis() -> int:
         units="days since 1979-01-01",
         coord_vals=time,
         cell_bounds=time_bnds,
+    )
+
+
+def time2_axis() -> int:
+    time = np.array([15.0, 45.0], dtype="d")
+    time_bnds = np.array([[0.0, 30.0], [30.0, 60.0]], dtype="d")
+    return cmor.axis(
+        table_entry="time2",
+        units="days since 1979-01-01",
+        coord_vals=time,
+        cell_bounds=time_bnds,
+    )
+
+
+def time3_axis(months: int = 2) -> int:
+    points: list[float] = []
+    bounds: list[list[float]] = []
+    for month_index in range(months):
+        month_start = month_index * 30.0
+        for hour in range(24):
+            lower = month_start + hour / 24.0
+            upper = month_start + 30.0 + (hour + 1) / 24.0
+            points.append((lower + upper) / 2.0)
+            bounds.append([lower, upper])
+    return cmor.axis(
+        table_entry="time3",
+        units="days since 1979-01-01",
+        coord_vals=np.array(points, dtype="d"),
+        cell_bounds=np.array(bounds, dtype="d"),
     )
 
 

@@ -1,5 +1,7 @@
 # Example: Hourly Point-Site Precipitation
 
+## What This Example Demonstrates
+
 This example writes `pr` from `obs4MIPs_A1hrPt.json` for a single in-situ site. The current published CV no longer accepts site-specific `grid_label` values or `grid_label = site`, so this validated run keeps `grid = site` and `site_id = US-ARM` but uses the CV-valid `grid_label = gn`. The first two records of `demo/demo-insitu/sample_in-situ1.nc` are converted from `mm/hour` to `kg m-2 s-1`.
 
 ## Dataset JSON Used
@@ -44,7 +46,7 @@ This example writes `pr` from `obs4MIPs_A1hrPt.json` for a single in-situ site. 
 - Frequency note: the table name is `A1hrPt`, but the output `frequency` attribute is `1hr`
 - Grid-label note: current obs4MIPs CV validation accepts `gn` for this native point layout; `grid = site` still carries the point-site meaning
 
-## Output File
+## Resolved Output File
 
 ```text
 /private/tmp/obs4mips-guide/pr-1hr-point-site/out/obs4MIPs/DOE-ARM/ARMBE-atm-c1-1-8/1hr/pr/gn/v20260512/pr_1hr_ARMBE-atm-c1-1-8_CMORGuide_gn_201801010030-201801010130.nc
@@ -124,6 +126,6 @@ variables:
 		:variant_info = "Example subset prepared for the CMOR dataset guide" ;
 		:variant_label = "CMORGuide" ;
 		:license = "Data in this file is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses)." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```

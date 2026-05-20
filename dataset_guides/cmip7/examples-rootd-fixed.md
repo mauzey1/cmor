@@ -1,5 +1,7 @@
 # Example: Fixed Land Field
 
+## What This Example Demonstrates
+
 This example writes `rootd_ti-u-hxy-lnd`, a time-independent land field. It shows the fixed-field case: no time axis is defined, the branded variable carries `temporal_label = ti`, and the dataset JSON uses `frequency = fx` so the DRS remains explicit about the fixed frequency.
 
 ## Dataset JSON Used
@@ -12,7 +14,6 @@ This example writes `rootd_ti-u-hxy-lnd`, a time-independent land field. It show
   "_controlled_vocabulary_file": "cmip7-cmor-tables/tables-cvs/cmor-cvs.json",
   "activity_id": "CMIP",
   "calendar": "360_day",
-  "drs_specs": "MIP-DRS7",
   "experiment_id": "amip",
   "forcing_index": "f3",
   "frequency": "fx",
@@ -20,14 +21,12 @@ This example writes `rootd_ti-u-hxy-lnd`, a time-independent land field. It show
   "initialization_index": "i1",
   "institution_id": "MOHC",
   "license_id": "CC-BY-4.0",
-  "mip_era": "CMIP7",
   "nominal_resolution": "100 km",
   "outpath": "/tmp/cmor-docs/rootd/out",
   "physics_index": "p1",
   "realization_index": "r9",
   "region": "glb",
-  "source_id": "DUMMY-MODEL",
-  "tracking_prefix": "hdl:21.14107"
+  "source_id": "DUMMY-MODEL"
 }
 ```
 
@@ -36,11 +35,12 @@ This example writes `rootd_ti-u-hxy-lnd`, a time-independent land field. It show
 - Table: `CMIP7_land.json`
 - Variable entry: `rootd_ti-u-hxy-lnd`
 - Axes: `latitude`, `longitude`
+- Root-string CV note: the published `_controlled_vocabulary_file` supplies root-level `drs_specs = "MIP-DRS7"`, `tracking_prefix = "hdl:21.14107"`, and `mip_era = "CMIP7"`, so CMOR derives them instead of reading them from dataset JSON
 
-## Output File
+## Resolved Output File
 
 ```text
-/tmp/cmor-docs/rootd/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/v20260515/rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
+/tmp/cmor-docs/rootd/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/fx/rootd/ti-u-hxy-lnd/g999/v20260520/rootd_ti-u-hxy-lnd_fx_glb_g999_DUMMY-MODEL_amip_r9i1p1f3.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -80,7 +80,7 @@ variables:
 		:area_label = "lnd" ;
 		:branded_variable = "rootd_ti-u-hxy-lnd" ;
 		:branding_suffix = "ti-u-hxy-lnd" ;
-		:creation_date = "2026-05-15T22:39:32Z" ;
+		:creation_date = "2026-05-20T18:58:17Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -89,7 +89,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "fx" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
+		:history = "2026-05-20T18:58:17Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -107,11 +107,11 @@ variables:
 		:table_info = "Name: CMIP7_land.json; Creation Date:(2026-04-21 15:01:29) MD5:bafb8e42cac0efce87531baf8e7d21b2" ;
 		:temporal_label = "ti" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/712ceb56-d182-4004-8da6-dd8dc62f8bc4" ;
+		:tracking_id = "hdl:21.14107/ee08ce88-8b62-4089-95e4-b3748ca53e2f" ;
 		:variable_id = "rootd" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```

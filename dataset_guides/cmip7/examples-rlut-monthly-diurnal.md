@@ -1,13 +1,14 @@
-# Example: Hybrid-Sigma Specific Humidity
+# Example: Monthly Diurnal With A `time3` Axis
 
 ## What This Example Demonstrates
 
-This example writes `hus_tavg-al-hxy-u`, a monthly model-level specific-humidity field on a standard hybrid-sigma coordinate. It shows the most complex case in this set: a vertical axis with formula terms, z-factors, and a surface-pressure field stored with the main variable.
+This example writes `rlut_tclmdc-u-hxy-u`, a CMIP7 Monthly Diurnal variable that uses the `time3` coordinate entry. It demonstrates two CMOR 3.15.1 behaviors that matter for driver authors: CMOR writes climatology bounds as `climatology_bnds` while keeping `frequency = 1hr`, and an explicit user override of `Conventions = CF-1.13` is preserved in both the global attribute and the default `history` string.
 
 ## Dataset JSON Used
 
 ```json
 {
+  "Conventions": "CF-1.13",
   "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
   "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json",
   "_cmip7_option": 1,
@@ -16,13 +17,13 @@ This example writes `hus_tavg-al-hxy-u`, a monthly model-level specific-humidity
   "calendar": "360_day",
   "experiment_id": "amip",
   "forcing_index": "f3",
-  "frequency": "mon",
+  "frequency": "1hr",
   "grid_label": "g999",
   "initialization_index": "i1",
   "institution_id": "MOHC",
   "license_id": "CC-BY-4.0",
   "nominal_resolution": "100 km",
-  "outpath": "/tmp/cmor-docs/hus-hybrid/out",
+  "outpath": "/tmp/cmor-docs/rlut-diurnal/out",
   "physics_index": "p1",
   "realization_index": "r9",
   "region": "glb",
@@ -33,66 +34,37 @@ This example writes `hus_tavg-al-hxy-u`, a monthly model-level specific-humidity
 ## Variable and Coordinate Choices
 
 - Table: `CMIP7_atmos.json`
-- Variable entry: `hus_tavg-al-hxy-u`
-- Axes: `time`, `standard_hybrid_sigma`, `latitude`, `longitude`
+- Variable entry: `rlut_tclmdc-u-hxy-u`
+- Axes: `time3`, `latitude`, `longitude`
 - Root-string CV note: the published `_controlled_vocabulary_file` supplies root-level `drs_specs = "MIP-DRS7"`, `tracking_prefix = "hdl:21.14107"`, and `mip_era = "CMIP7"`, so CMOR derives them instead of reading them from dataset JSON
-- Z-factors written: `a`, `b`, `p0`, `ps`, `a_bnds`, `b_bnds`
+- Time-axis note: CMOR writes the output coordinate as `time`, attaches `climatology = "climatology_bnds"`, and keeps `long_name = "Diurnal Mean"`
+- Sampling note: this example writes two monthly diurnal cycles, so the output contains 48 hourly climatology bins spanning January and February
+- Output-naming note: the resolved filename uses a monthly `197901-197903` time-range suffix without an extra climatology marker
 
 ## Resolved Output File
 
 ```text
-/tmp/cmor-docs/hus-hybrid/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/hus/tavg-al-hxy-u/g999/v20260520/hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/rlut-diurnal/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/1hr/rlut/tclmdc-u-hxy-u/g999/v20260520/rlut_tclmdc-u-hxy-u_1hr_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197903.nc
 ```
 
 ## Full `ncdump -h` Output
 
 ```text
-netcdf hus_tavg-al-hxy-u_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902 {
+netcdf rlut_tclmdc-u-hxy-u_1hr_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197903 {
 dimensions:
-	time = UNLIMITED ; // (2 currently)
-	lev = 5 ;
+	time = UNLIMITED ; // (48 currently)
 	lat = 3 ;
 	lon = 4 ;
 	bnds = 2 ;
 variables:
 	double time(time) ;
-		time:bounds = "time_bnds" ;
+		time:climatology = "climatology_bnds" ;
 		time:units = "days since 1979-01-01" ;
 		time:calendar = "360_day" ;
 		time:axis = "T" ;
-		time:long_name = "Time Intervals" ;
+		time:long_name = "Diurnal Mean" ;
 		time:standard_name = "time" ;
-	double time_bnds(time, bnds) ;
-	double lev(lev) ;
-		lev:bounds = "lev_bnds" ;
-		lev:units = "1" ;
-		lev:axis = "Z" ;
-		lev:positive = "down" ;
-		lev:long_name = "hybrid sigma pressure coordinate" ;
-		lev:standard_name = "atmosphere_hybrid_sigma_pressure_coordinate" ;
-		lev:formula = "p = a*p0 + b*ps" ;
-		lev:formula_terms = "p0: p0 a: a b: b ps: ps" ;
-	double lev_bnds(lev, bnds) ;
-		lev_bnds:formula = "p = a*p0 + b*ps" ;
-		lev_bnds:standard_name = "atmosphere_hybrid_sigma_pressure_coordinate" ;
-		lev_bnds:units = "1" ;
-		lev_bnds:formula_terms = "p0: p0 a: a_bnds b: b_bnds ps: ps" ;
-	double p0 ;
-		p0:standard_name = "reference_air_pressure_for_atmosphere_vertical_coordinate" ;
-		p0:long_name = "vertical coordinate formula term: reference pressure" ;
-		p0:units = "Pa" ;
-	double a(lev) ;
-		a:long_name = "vertical coordinate formula term: a" ;
-	double b(lev) ;
-		b:long_name = "vertical coordinate formula term: b" ;
-	float ps(time, lat, lon) ;
-		ps:standard_name = "air_pressure" ;
-		ps:long_name = "Surface Air Pressure" ;
-		ps:units = "Pa" ;
-	double a_bnds(lev, bnds) ;
-		a_bnds:long_name = "vertical coordinate formula term: a(k+1/2)" ;
-	double b_bnds(lev, bnds) ;
-		b_bnds:long_name = "vertical coordinate formula term: b(k+1/2)" ;
+	double climatology_bnds(time, bnds) ;
 	double lat(lat) ;
 		lat:bounds = "lat_bnds" ;
 		lat:units = "degrees_north" ;
@@ -107,30 +79,30 @@ variables:
 		lon:long_name = "Longitude" ;
 		lon:standard_name = "longitude" ;
 	double lon_bnds(lon, bnds) ;
-	float hus(time, lev, lat, lon) ;
-		hus:standard_name = "specific_humidity" ;
-		hus:long_name = "Specific Humidity" ;
-		hus:units = "1" ;
-		hus:cell_methods = "area: time: mean" ;
-		hus:missing_value = 1.e+20f ;
-		hus:_FillValue = 1.e+20f ;
+	float rlut(time, lat, lon) ;
+		rlut:standard_name = "toa_outgoing_longwave_flux" ;
+		rlut:long_name = "TOA Outgoing Longwave Radiation" ;
+		rlut:units = "W m-2" ;
+		rlut:cell_methods = "area: mean time: mean within days time: mean over days" ;
+		rlut:missing_value = 1.e+20f ;
+		rlut:_FillValue = 1.e+20f ;
 
 // global attributes:
-		:Conventions = "CF-1.12" ;
+		:Conventions = "CF-1.13" ;
 		:activity_id = "CMIP" ;
 		:area_label = "u" ;
-		:branded_variable = "hus_tavg-al-hxy-u" ;
-		:branding_suffix = "tavg-al-hxy-u" ;
-		:creation_date = "2026-05-20T18:58:20Z" ;
+		:branded_variable = "rlut_tclmdc-u-hxy-u" ;
+		:branding_suffix = "tclmdc-u-hxy-u" ;
+		:creation_date = "2026-05-20T19:15:08Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
 		:experiment = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:experiment_id = "amip" ;
 		:forcing_index = "f3" ;
-		:frequency = "mon" ;
+		:frequency = "1hr" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-20T18:58:20Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
+		:history = "2026-05-20T19:15:08Z ; CMOR rewrote data to be consistent with CF-1.13 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -146,13 +118,13 @@ variables:
 		:source = "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice" ;
 		:source_id = "DUMMY-MODEL" ;
 		:table_info = "Name: CMIP7_atmos.json; Creation Date:(2026-04-21 15:01:29) MD5:6c425d5354e32ec5498084c927c982a9" ;
-		:temporal_label = "tavg" ;
+		:temporal_label = "tclmdc" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:variable_id = "hus" ;
+		:tracking_id = "hdl:21.14107/073a42d6-fb5b-4dd6-bbbf-054572fc62bb" ;
+		:variable_id = "rlut" ;
 		:variant_label = "r9i1p1f3" ;
-		:vertical_label = "al" ;
+		:vertical_label = "u" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
 		:cmor_version = "3.15.1" ;
-		:tracking_id = "hdl:21.14107/c49816be-d075-4168-9d80-826ccac272c7" ;
 }
 ```

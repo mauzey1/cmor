@@ -1,5 +1,7 @@
 # Example: Daily Tasmax With An Implicit `height2m` Coordinate
 
+## What This Example Demonstrates
+
 This example writes `tasmax` from `DRCDP_APday.json` using only `time`, `latitude`, and `longitude` axes. It demonstrates that the near-surface `height2m` requirement is resolved by CMOR from the table metadata, so the output contains a scalar `height` coordinate even though the driver never calls `cmor.axis("height2m", ...)`.
 
 ## Dataset JSON Used
@@ -32,7 +34,7 @@ This example writes `tasmax` from `DRCDP_APday.json` using only `time`, `latitud
 - Implicit vertical coordinate: `height2m` from the table becomes scalar `height` in the output
 - Source-driven metadata: the `LOCA2-1` CV entry supplies `institution_id = UCSD-SIO`, `region_id = NAM`, `nominal_resolution = 5 km`, and the title and contact metadata
 
-## Output File
+## Resolved Output File
 
 ```text
 /private/tmp/drcdp-guide/tasmax-height2m/out/DRCDP/NAM/UCSD-SIO/LOCA2-1/CMIP6/CMIP/historical/ACCESS-CM2/r1i1p1f1/day/tasmax/v20260512/tasmax_NAM_UCSD-SIO_LOCA2-1_CMIP6_historical_ACCESS-CM2_r1i1p1f1_day_20081231-20090101.nc
@@ -125,7 +127,6 @@ variables:
 		:tracking_id = "hdl:21.14100/f639caed-cef7-4156-a6c1-c9699e354079" ;
 		:variable_id = "tasmax" ;
 		:license = "CC BY 4.0; DRDCP data produced by UCSD-SIO is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing DRDCP output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```
-

@@ -1,5 +1,7 @@
 # Example: Monthly Gridded Precipitation On A Regular Latitude-Longitude Grid
 
+## What This Example Demonstrates
+
 This example writes `pr` from `obs4MIPs_Amon.json` on a regular `lat`/`lon` grid. It uses a small subset of the bundled `demo-global2D/precip.mon.mean.nc` file, converts the source units from `mm/day` to `kg m-2 s-1`, and validates the current `CMAP-V1902` source metadata against the published obs4MIPs CV.
 
 ## Dataset JSON Used
@@ -41,7 +43,7 @@ This example writes `pr` from `obs4MIPs_Amon.json` on a regular `lat`/`lon` grid
 - Unit conversion: `mm/day` to `kg m-2 s-1` by dividing by `86400`
 - CV-derived metadata in the output: `institution`, `region`, `source`, `source_type`, `source_version_number`, `frequency`, `realm`, `table_id`, and `variable_id`
 
-## Output File
+## Resolved Output File
 
 ```text
 /private/tmp/obs4mips-guide/pr-mon-global-grid/out/obs4MIPs/NOAA-NCEI/CMAP-V1902/mon/pr/gn/v20260512/pr_mon_CMAP-V1902_CMORGuide_gn_197901-197902.nc
@@ -123,7 +125,6 @@ variables:
 		:variant_info = "Example subset prepared for the CMOR dataset guide" ;
 		:variant_label = "CMORGuide" ;
 		:license = "Data in this file is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses)." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```
-

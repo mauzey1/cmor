@@ -1,5 +1,7 @@
 # Example: Pressure-Level Air Temperature
 
+## What This Example Demonstrates
+
 This example writes `ta_tavg-p19-hxy-air`, a monthly air-temperature field on the standard 19 pressure levels. It shows the pressure-level case where the driver must supply the coordinate values requested by `plev19`.
 
 ## Dataset JSON Used
@@ -12,7 +14,6 @@ This example writes `ta_tavg-p19-hxy-air`, a monthly air-temperature field on th
   "_controlled_vocabulary_file": "cmip7-cmor-tables/tables-cvs/cmor-cvs.json",
   "activity_id": "CMIP",
   "calendar": "360_day",
-  "drs_specs": "MIP-DRS7",
   "experiment_id": "amip",
   "forcing_index": "f3",
   "frequency": "mon",
@@ -20,14 +21,12 @@ This example writes `ta_tavg-p19-hxy-air`, a monthly air-temperature field on th
   "initialization_index": "i1",
   "institution_id": "MOHC",
   "license_id": "CC-BY-4.0",
-  "mip_era": "CMIP7",
   "nominal_resolution": "100 km",
   "outpath": "/tmp/cmor-docs/ta-p19/out",
   "physics_index": "p1",
   "realization_index": "r9",
   "region": "glb",
-  "source_id": "DUMMY-MODEL",
-  "tracking_prefix": "hdl:21.14107"
+  "source_id": "DUMMY-MODEL"
 }
 ```
 
@@ -36,11 +35,12 @@ This example writes `ta_tavg-p19-hxy-air`, a monthly air-temperature field on th
 - Table: `CMIP7_atmos.json`
 - Variable entry: `ta_tavg-p19-hxy-air`
 - Axes: `time`, `plev19`, `latitude`, `longitude`
+- Root-string CV note: the published `_controlled_vocabulary_file` supplies root-level `drs_specs = "MIP-DRS7"`, `tracking_prefix = "hdl:21.14107"`, and `mip_era = "CMIP7"`, so CMOR derives them instead of reading them from dataset JSON
 
-## Output File
+## Resolved Output File
 
 ```text
-/tmp/cmor-docs/ta-p19/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/ta/tavg-p19-hxy-air/g999/v20260515/ta_tavg-p19-hxy-air_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
+/tmp/cmor-docs/ta-p19/out/MIP-DRS7/CMIP7/CMIP/MOHC/DUMMY-MODEL/amip/r9i1p1f3/glb/mon/ta/tavg-p19-hxy-air/g999/v20260520/ta_tavg-p19-hxy-air_mon_glb_g999_DUMMY-MODEL_amip_r9i1p1f3_197901-197902.nc
 ```
 
 ## Full `ncdump -h` Output
@@ -96,7 +96,7 @@ variables:
 		:area_label = "air" ;
 		:branded_variable = "ta_tavg-p19-hxy-air" ;
 		:branding_suffix = "tavg-p19-hxy-air" ;
-		:creation_date = "2026-05-15T22:39:32Z" ;
+		:creation_date = "2026-05-20T18:58:17Z" ;
 		:data_specs_version = "MIP-DS7.1.0.0" ;
 		:description = "Simulation of the climate of the recent past with prescribed sea surface temperatures and sea ice concentrations." ;
 		:drs_specs = "MIP-DRS7" ;
@@ -105,7 +105,7 @@ variables:
 		:forcing_index = "f3" ;
 		:frequency = "mon" ;
 		:grid_label = "g999" ;
-		:history = "2026-05-15T22:39:32Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
+		:history = "2026-05-20T18:58:17Z ; CMOR rewrote data to be consistent with CF-1.12 and CMIP7 data requirements." ;
 		:horizontal_label = "hxy" ;
 		:initialization_index = "i1" ;
 		:institution = "Met Office Hadley Centre" ;
@@ -123,11 +123,11 @@ variables:
 		:table_info = "Name: CMIP7_atmos.json; Creation Date:(2026-04-21 15:01:29) MD5:6c425d5354e32ec5498084c927c982a9" ;
 		:temporal_label = "tavg" ;
 		:title = "DUMMY-MODEL output prepared for CMIP7" ;
-		:tracking_id = "hdl:21.14107/f14a20d7-7b9e-45d3-ae4f-bb27a238d907" ;
+		:tracking_id = "hdl:21.14107/cb211407-a2fd-4c86-b147-4738fa859f98" ;
 		:variable_id = "ta" ;
 		:variant_label = "r9i1p1f3" ;
 		:vertical_label = "p19" ;
 		:license = "CC-BY-4.0; CMIP7 data produced by MOHC is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```

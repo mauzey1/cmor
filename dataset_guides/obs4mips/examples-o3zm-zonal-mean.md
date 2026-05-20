@@ -1,5 +1,7 @@
 # Example: Monthly Zonal-Mean Ozone Profile
 
+## What This Example Demonstrates
+
 This example writes the `o3zm` table entry from `obs4MIPs_Amon.json` using a zonal-mean `latitude` plus `height` coordinate system. It subsets the bundled `demo-zonalmeans/BSVerticalOzone_MR_GPH_Tier1.3_v1.0.nc` file, converts the source `altitude` axis from kilometers to meters, and writes the current zonal-mean `grid_label = gnz`.
 
 ## Dataset JSON Used
@@ -41,7 +43,7 @@ This example writes the `o3zm` table entry from `obs4MIPs_Amon.json` using a zon
 - Height-axis handling: source `altitude` is in kilometers; the example writes `height` in meters
 - Grid-label note: the current CV accepts `gnz` for zonal-mean data; this guide uses that more specific label instead of generic `gn`
 
-## Output File
+## Resolved Output File
 
 ```text
 /private/tmp/obs4mips-guide/o3zm-zonal-mean/out/obs4MIPs/DLR-BIRA/BSVertOzone-v1-0/mon/o3/gnz/v20260512/o3_mon_BSVertOzone-v1-0_CMORGuide_gnz_197901-197902.nc
@@ -122,7 +124,6 @@ variables:
 		:variant_info = "Example subset prepared for the CMOR dataset guide" ;
 		:variant_label = "CMORGuide" ;
 		:license = "Data in this file is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses)." ;
-		:cmor_version = "3.15.0" ;
+		:cmor_version = "3.15.1" ;
 }
 ```
-

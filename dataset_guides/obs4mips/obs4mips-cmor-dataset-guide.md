@@ -113,7 +113,7 @@ Point-site workflows use `obs4MIPs_site_id.json` outside the variable tables. In
 - the driver uses the site registry to obtain latitude and longitude
 - `site_location` is carried as explicit JSON metadata
 
-### Variable And Coordinate Tables
+### Variable, Coordinate, And Formula-Term Tables
 
 The table entry defines the variable-specific part of the file:
 
@@ -130,6 +130,8 @@ The coordinate table defines the available axes and whether bounds are required:
 - `latitude` and `longitude` require bounds
 - `latitude1` and `longitude1` do not require bounds
 - `height` does not require bounds in the validated zonal-mean profile case
+
+`obs4MIPs_formula_terms.json` is also part of the validated dataset JSON. The selected example variables do not need z-factors, but the file remains part of the documented obs4MIPs input contract for cases that do.
 
 ### CMOR-Derived Fields
 
@@ -162,7 +164,7 @@ The validated runs in this guide showed:
 - the current published CV also rejects `grid_label = site` for the point-site table
 - the validated point-site example works with `grid = site`, `grid_label = gn`, and `site_id = US-ARM`
 
-All three validated runs also emit the same non-fatal table-load warnings from CMOR 3.15.0:
+All three validated runs also emit the same non-fatal table-load warnings from CMOR 3.15.1:
 
 ```text
 Warning: Attribute "activity_id" must be an array or object
@@ -316,7 +318,7 @@ Even though the templates are written without literal separators, CMOR resolves 
 - path segments in the directory tree
 - underscores in the filename body
 
-With CMOR 3.15.0, this token-only `output_path_template` form produces the intended directory tree. The older slash-separated template shown in some legacy obs4MIPs demos produces doubled separators in validation runs with the current environment.
+With CMOR 3.15.1, this token-only `output_path_template` form produces the intended directory tree. The older slash-separated template shown in some legacy obs4MIPs demos produces doubled separators in validation runs with the current environment.
 
 Resolved examples from this guide:
 
@@ -328,6 +330,8 @@ Resolved examples from this guide:
   `/private/tmp/obs4mips-guide/o3zm-zonal-mean/out/obs4MIPs/DLR-BIRA/BSVertOzone-v1-0/mon/o3/gnz/v20260512/o3_mon_BSVertOzone-v1-0_CMORGuide_gnz_197901-197902.nc`
 
 ## Example Pages
+
+Runnable scripts for these cases live under `example-data-tools/`.
 
 - [Monthly gridded `pr`](examples-pr-mon-global-grid.md)
 - [Hourly point-site `pr`](examples-pr-1hr-point-site.md)
