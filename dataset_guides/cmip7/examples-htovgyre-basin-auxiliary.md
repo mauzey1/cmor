@@ -4,8 +4,6 @@
 
 This example writes `htovgyre_tavg-u-hyb-sea`, a monthly northward ocean heat transport variable whose table dimensions include `latitude`, `basin`, and `time`. The `basin` coordinate is a CMIP7 character coordinate, so CMOR writes a `sector(basin, strlen)` auxiliary coordinate and adds `coordinates = "sector"` to the main variable.
 
-This is the CMIP7 guide example corresponding to the auxiliary-coordinate pattern shown by Example 4 in `CMIP7_output_metadata_requirements_11Mar2026.md`.
-
 ## Dataset JSON Used
 
 ```json
