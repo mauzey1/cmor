@@ -236,6 +236,7 @@ The linked examples below show the main dataset shapes covered by this guide.
 | Monthly ocean field with parent metadata | Adds the required `branch_*` and `parent_*` lineage attributes | [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) |
 | Monthly Diurnal climatology with explicit `Conventions` override | Uses `time3`, writes `climatology_bnds`, keeps `frequency = 1hr`, and preserves `Conventions = CF-1.13` in both the global attribute and default `history` string | [Monthly Diurnal `rlut`](examples-rlut-monthly-diurnal.md) |
 | Monthly ice-sheet rainfall flux | Shows a branded variable whose `area_label` and `realm` are not the simplest single-realm case | [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md) |
+| Monthly ocean transport by basin | Uses the character `basin` coordinate and writes `sector(basin, strlen)` as an auxiliary coordinate | [Basin auxiliary-coordinate `htovgyre`](examples-htovgyre-basin-auxiliary.md) |
 | Fixed land field | Omits the time axis and uses `frequency = fx` | [Fixed `rootd`](examples-rootd-fixed.md) |
 | Near-surface scalar height | Uses a singleton vertical coordinate written as a scalar `height` variable | [Scalar-height `tas`](examples-tas-height2m.md) |
 | Pressure-level atmosphere field | Uses `plev19` and writes a length-19 pressure coordinate | [Pressure-level `ta`](examples-ta-plev19.md) |
@@ -266,6 +267,16 @@ The `tos_tavg-u-hxy-sea` curvilinear example uses:
 - a grid id returned by `cmor.grid(...)`, passed with the time axis to `cmor.variable(...)`
 
 In the verified output, the main data variable is written as `tos(time, rlat, rlon)` and has `coordinates = "latitude longitude"`.
+
+### Auxiliary Character Coordinates
+
+Some CMIP7 dimensions are character coordinates rather than numeric axes. The `htovgyre_tavg-u-hyb-sea` example uses the `basin` coordinate with three labels:
+
+- `atlantic_arctic_ocean`
+- `indian_pacific_ocean`
+- `global_ocean`
+
+CMOR writes those labels as the auxiliary coordinate `sector(basin, strlen)` and adds `coordinates = "sector"` to the main `htovgyre` variable.
 
 ### Singleton Vertical Coordinates
 
@@ -373,6 +384,7 @@ Runnable scripts for these cases live under `example-data-tools/`.
 - [Parented `piControl` `tos`](examples-tos-parent-picontrol.md)
 - [Monthly Diurnal `rlut`](examples-rlut-monthly-diurnal.md)
 - [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md)
+- [Basin auxiliary-coordinate `htovgyre`](examples-htovgyre-basin-auxiliary.md)
 - [Fixed `rootd`](examples-rootd-fixed.md)
 - [Scalar-height `tas`](examples-tas-height2m.md)
 - [Pressure-level `ta`](examples-ta-plev19.md)
