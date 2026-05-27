@@ -232,6 +232,7 @@ The linked examples below show the main dataset shapes covered by this guide.
 | Example family | What changes in the output | Link |
 | --- | --- | --- |
 | Monthly native-grid ocean field | Standard `time` + `lat` + `lon` case on a native grid | [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md) |
+| Monthly curvilinear-grid ocean field | Uses `CMIP7_grids.json` and `cmor.grid(...)` to write `rlat`, `rlon`, 2-D auxiliary `latitude`/`longitude`, and vertex bounds | [Monthly curvilinear-grid `tos`](examples-tos-monthly-curvilinear-grid.md) |
 | Monthly ocean field with parent metadata | Adds the required `branch_*` and `parent_*` lineage attributes | [Parented `piControl` `tos`](examples-tos-parent-picontrol.md) |
 | Monthly Diurnal climatology with explicit `Conventions` override | Uses `time3`, writes `climatology_bnds`, keeps `frequency = 1hr`, and preserves `Conventions = CF-1.13` in both the global attribute and default `history` string | [Monthly Diurnal `rlut`](examples-rlut-monthly-diurnal.md) |
 | Monthly ice-sheet rainfall flux | Shows a branded variable whose `area_label` and `realm` are not the simplest single-realm case | [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md) |
@@ -252,6 +253,19 @@ The standard native-grid case uses:
 - `time` with bounds for interval data
 
 These become `lat`, `lon`, and `time` variables in the output.
+
+### Curvilinear Grids
+
+Curvilinear-grid cases use `CMIP7_grids.json` and `cmor.grid(...)` when the model's horizontal grid is not represented by independent 1-D latitude and longitude axes.
+
+The `tos_tavg-u-hxy-sea` curvilinear example uses:
+
+- `grid_latitude` and `grid_longitude` axes from `CMIP7_grids.json`
+- 2-D auxiliary `latitude` and `longitude` arrays
+- 4-corner `vertices_latitude` and `vertices_longitude` arrays
+- a grid id returned by `cmor.grid(...)`, passed with the time axis to `cmor.variable(...)`
+
+In the verified output, the main data variable is written as `tos(time, rlat, rlon)` and has `coordinates = "latitude longitude"`.
 
 ### Singleton Vertical Coordinates
 
@@ -291,7 +305,7 @@ For `standard_hybrid_sigma`, the output depends on:
 
 ### Other Grid Families
 
-The CMIP7 tables in this repository also define rotated, projected, and unstructured horizontal grids. Those follow the same high-level pattern: the driver must define the grid and any auxiliary coordinates before writing the main variable. This example set focuses on native latitude-longitude output plus vertical-coordinate variation.
+The CMIP7 tables in this repository also define rotated, projected, and unstructured horizontal grids. Those follow the same high-level pattern shown by the curvilinear `tos` example: the driver must define the grid and any auxiliary coordinates before writing the main variable.
 
 ### Chunking And Streaming Writes
 
@@ -355,6 +369,7 @@ That means:
 Runnable scripts for these cases live under `example-data-tools/`.
 
 - [Monthly native-grid `tos`](examples-tos-monthly-native-grid.md)
+- [Monthly curvilinear-grid `tos`](examples-tos-monthly-curvilinear-grid.md)
 - [Parented `piControl` `tos`](examples-tos-parent-picontrol.md)
 - [Monthly Diurnal `rlut`](examples-rlut-monthly-diurnal.md)
 - [Monthly ice-sheet `prra`](examples-prra-monthly-ice-sheet.md)
